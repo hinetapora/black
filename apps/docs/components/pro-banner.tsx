@@ -89,7 +89,7 @@ export const ProBanner = () => {
               color: "transparent",
             }}
           >
-            Ship faster with beautiful components
+            Founders Round 3
           </span>
         </a>
         <a
@@ -100,7 +100,7 @@ export const ProBanner = () => {
         >
           <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#F54180_0%,#338EF7_50%,#F54180_100%)]" />
           <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-background group-hover:bg-background/70 transition-background px-3 py-1 text-sm font-medium text-foreground backdrop-blur-3xl">
-            NextUI Pro
+            OPEN NOW
             <Icon
               aria-hidden="true"
               className="outline-none transition-transform group-hover:translate-x-0.5 [&>path]:stroke-[2px]"

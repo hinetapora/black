@@ -1,5 +1,6 @@
 import React from "react";
 import {Code} from "@nextui-org/react";
+import { FaPalette, FaMobileAlt, FaCreditCard, FaChartLine, FaBullhorn, FaLink, FaBitcoin, FaLightbulb } from 'react-icons/fa';
 
 import {
   MoonIcon,
@@ -17,28 +18,52 @@ import {
 export default {
   topFeatures: [
     {
-      title: "Themeable",
+      title: "Customizable Branding",
       description:
-        "Provides a plugin to customize default themes, you can change all semantic tokens or create an entire new theme.",
-      icon: <MagicIcon className="text-pink-500" />,
+        "Easily upload your logo, customize colors, and create a branded experience tailored to your audience.",
+      icon: <FaPalette className="text-blue-500 dark:text-blue-100" />,
     },
     {
-      title: "Fast",
+      title: "Fully Functioning VPN Apps",
       description:
-        "Built on top of Tailwind CSS, which means no runtime styles, and no unnecessary classes in your bundle.",
-      icon: <FlashIcon className="text-pink-500" />,
+        "Provide your users with ready-to-use VPN apps for Android, iPhone, Windows, and macOS, seamlessly integrated with your brand.",
+      icon: <FaMobileAlt className="text-blue-500 dark:text-blue-100" />,
     },
     {
-      title: "Light & Dark UI",
+      title: "Effortless Payment Integration",
       description:
-        "Automatic dark mode recognition, NextUI automatically changes the theme when detects HTML theme prop changes.",
-      icon: <MoonIcon className="text-pink-500" />,
+        "Powered by Stripe, our system ensures secure and hassle-free payment processing for all your customers.",
+      icon: <FaCreditCard className="text-blue-500 dark:text-blue-100" />,
     },
     {
-      title: "Unique DX",
+      title: "Comprehensive Dashboard",
       description:
-        "NextUI is fully-typed to minimize the learning curve, and provide the best possible developer experience.",
-      icon: <DevicesIcon className="text-pink-500" />,
+        "Track sales, referrals, and conversions in real-time with an intuitive dashboard that keeps you informed and in control.",
+      icon: <FaChartLine className="text-blue-500 dark:text-blue-100" />,
+    },
+    {
+      title: "Integrated Marketing Tools",
+      description:
+        "Access ready-to-use social media sharing links, promotional assets, and video templates tailored for platforms like TikTok and Instagram.",
+      icon: <FaBullhorn className="text-blue-500 dark:text-blue-100" />,
+    },
+    {
+      title: "Affiliate Marketing Features",
+      description:
+        "Generate unique referral links or codes for your followers and offer custom rewards to incentivize sharing.",
+      icon: <FaLink className="text-blue-500 dark:text-blue-300" />,
+    },
+    {
+      title: "Crypto Token Rewards",
+      description:
+        "Boost engagement with referral-based crypto token rewards, encouraging customers to spread the word about your VPN service.",
+      icon: <FaBitcoin className="text-blue-500 dark:text-blue-300" />,
+    },
+    {
+      title: "Exclusive Insights & Tools",
+      description:
+        "Leverage tools tailored to TikTok influencers, like trend analytics, hashtag recommendations, and audience engagement data.",
+      icon: <FaLightbulb className="text-blue-500 dark:text-blue-300" />,
     },
   ],
   fullFeatures: [

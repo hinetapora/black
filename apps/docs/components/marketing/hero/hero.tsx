@@ -45,13 +45,16 @@ export const Hero = () => {
         </div>
         <div className="leading-8 text-center md:leading-10 md:text-left">
           <div className="inline-block">
-            <h1 className={title()}>Make&nbsp;</h1>
-            <h1 className={title({color: "violet"})}>beautiful&nbsp;</h1>
+            <h1 className={title()}>Your&nbsp;</h1>
+            <h1 className={title({color: "violet"})}>Brand, </h1>
+            <h1 className={title()}>our </h1>
+            <h1 className={title({color: "blue"})}>Global VPN Service, </h1>
+            <h1 className={title()}>your &nbsp;</h1>
+            <h1 className={title({color: "green"})}>Success&nbsp;</h1>
           </div>
-          <h1 className={title()}>websites regardless of your design experience.</h1>
         </div>
         <h2 className={subtitle({fullWidth: true, class: "text-center md:text-left"})}>
-          Beautiful, fast and modern React UI library.
+        Quick, easy, risk-free. Build your private-label VPN service in under 60 seconds — limited spots available.
         </h2>
         <div className="flex flex-col items-center gap-4 md:flex-row">
           <Button
@@ -94,7 +97,7 @@ export const Hero = () => {
           >
             npx nextui-cli@latest init
           </Snippet>
-          <Button
+{/*           <Button
             fullWidth
             isExternal
             as={Link}
@@ -114,7 +117,7 @@ export const Hero = () => {
             }}
           >
             GitHub
-          </Button>
+          </Button> */}
         </div>
       </div>
 
