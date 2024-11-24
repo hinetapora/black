@@ -1,39 +1,46 @@
 "use client";
 
-import {FC} from "react";
-import {VisuallyHidden} from "@react-aria/visually-hidden";
-import {SwitchProps, useSwitch} from "@nextui-org/react";
-import {useTheme} from "next-themes";
-import {clsx} from "@nextui-org/shared-utils";
-import {useIsSSR} from "@react-aria/ssr";
+import { FC } from "react";
+import { VisuallyHidden } from "@react-aria/visually-hidden";
+import { SwitchProps, useSwitch } from "@nextui-org/react";
+import { useTheme } from "next-themes";
+import { clsx } from "@nextui-org/shared-utils";
+import { useIsSSR } from "@react-aria/ssr";
 
-import {SunFilledIcon, MoonFilledIcon} from "@/components/icons";
-import {trackEvent} from "@/utils/va";
+import { SunFilledIcon, MoonFilledIcon } from "@/components/icons";
+import { trackEvent } from "@/utils/va";
 
 export interface ThemeSwitchProps {
   className?: string;
   classNames?: SwitchProps["classNames"];
 }
 
-export const ThemeSwitch: FC<ThemeSwitchProps> = ({className, classNames}) => {
-  const {theme, setTheme} = useTheme();
+export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className, classNames }) => {
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const isSSR = useIsSSR();
+  const isLightTheme = theme === "light" || resolvedTheme === "light";
 
   const onChange = () => {
-    theme === "light" ? setTheme("dark") : setTheme("light");
+    const nextTheme = isLightTheme ? "dark" : "light";
+    setTheme(nextTheme);
 
-    trackEvent("ThemeChange", {
-      action: "click",
-      category: "theme",
-      data: theme === "light" ? "dark" : "light",
-    });
+    try {
+      trackEvent("ThemeChange", {
+        action: "click",
+        category: "theme",
+        data: nextTheme,
+      });
+    } catch (error) {
+      console.error("Failed to track theme change event:", error);
+    }
   };
 
-  const {Component, slots, isSelected, getBaseProps, getInputProps, getWrapperProps} = useSwitch({
-    isSelected: theme === "light",
-    "aria-label": `Switch to ${theme === "light" ? "dark" : "light"} mode`,
-    onChange,
-  });
+  const { Component, slots, isSelected, getBaseProps, getInputProps, getWrapperProps } =
+    useSwitch({
+      isSelected: isLightTheme,
+      "aria-label": `Switch to ${isLightTheme ? "dark" : "light"} mode`,
+      onChange,
+    });
 
   return (
     <Component
@@ -41,7 +48,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({className, classNames}) => {
         className: clsx(
           "p-1 w-8 h-8 transition-opacity hover:opacity-80 cursor-pointer",
           className,
-          classNames?.base,
+          classNames?.base
         ),
       })}
     >
@@ -63,11 +70,15 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({className, classNames}) => {
               "px-0",
               "mx-0",
             ],
-            classNames?.wrapper,
+            classNames?.wrapper
           ),
         })}
       >
-        {!isSelected || isSSR ? <SunFilledIcon size={22} /> : <MoonFilledIcon size={22} />}
+        {!isSelected || isSSR ? (
+          <SunFilledIcon size={22} title="Light Mode" aria-hidden="true" />
+        ) : (
+          <MoonFilledIcon size={22} title="Dark Mode" aria-hidden="true" />
+        )}
       </div>
     </Component>
   );

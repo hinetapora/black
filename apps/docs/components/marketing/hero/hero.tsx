@@ -6,7 +6,7 @@ import {ArrowRightIcon} from "@nextui-org/shared-icons";
 import dynamic from "next/dynamic";
 
 import {FloatingComponents} from "./floating-components";
-
+import {SupportProps} from "../partners";
 import {GithubIcon} from "@/components/icons";
 import {title, subtitle} from "@/components/primitives";
 import {trackEvent} from "@/utils/va";
@@ -26,8 +26,8 @@ export const Hero = () => {
   };
 
   return (
-    <section className="flex relative overflow-hidden lg:overflow-visible w-full flex-nowrap justify-between items-center h-[calc(100vh_-_64px)] 2xl:h-[calc(84vh_-_64px)]">
-      <div className="relative z-20 flex flex-col w-full gap-6 lg:w-1/2 xl:mt-10">
+    <section className="flex relative overflow-hidden lg:overflow-visible w-full flex-nowrap justify-between items-center h-[calc(80vh_-_34px)] 2xl:h-[calc(54vh_-_34px)]">
+      <div className="relative z-20 flex flex-col w-full gap-6 lg:w-1/2 xl:mt-4">
         <div className="flex justify-center w-full md:hidden">
           <Chip
             as={NextLink}
@@ -44,18 +44,63 @@ export const Hero = () => {
           </Chip>
         </div>
         <div className="leading-8 text-center md:leading-10 md:text-left">
-          <div className="inline-block">
-            <h1 className={title()}>Your&nbsp;</h1>
-            <h1 className={title({color: "violet"})}>Brand, </h1>
-            <h1 className={title()}>our </h1>
-            <h1 className={title({color: "blue"})}>Global VPN Service, </h1>
-            <h1 className={title()}>your &nbsp;</h1>
-            <h1 className={title({color: "green"})}>Success&nbsp;</h1>
-          </div>
+
+
+        <div className="inline-block">
+          <h1 className={title()}>
+            <span className=" decoration-green-500">Your&nbsp;</span>
+          </h1>
+          <h1 className={title({ color: "violet" })}>Brand, </h1>
+          <h1 className={title()}>our </h1>
+          <h1 className={title({ color: "blue" })}>Global VPN, </h1>
+          <h1 className={title()}>Your
+            <span>&nbsp;</span>
+
+          </h1>
+          <h1 className={`${title({ color: "green" })} `}>
+          Success
+
+          </h1>
+          <span>&nbsp;&nbsp;</span>
+          <span
+            aria-label="rocket"
+            className={`${title( )} `} 
+            role="img"
+          >
+            🎉
+          </span>
+
         </div>
-        <h2 className={subtitle({fullWidth: true, class: "text-center md:text-left"})}>
-        Quick, easy, risk-free. Build your private-label VPN service in under 60 seconds — limited spots available.
-        </h2>
+
+
+        </div>
+
+        <h2 className={subtitle({ fullWidth: true, class: "text-center md:text-left" })}>
+  Fast, effortless, risk-free. Launch{" "}
+  <span
+    aria-label="rocket"
+    className="hidden md:inline-block"
+    role="img"
+  >
+    🚀
+  </span>{" "}
+  your private-label VPN service with Stripe payments + crypto token rewards in under 60 seconds.
+  <br />
+  <span className="block mt-2">
+    Limited spots now open exclusively for top social influencers &{" "}
+    <span className=" decoration-blue-500">visionary founders</span>{" "}
+    <span
+      aria-label="star"
+      role="img"
+      className="inline-block"
+    >
+      🌟
+    </span>
+  </span>
+</h2>
+
+
+
         <div className="flex flex-col items-center gap-4 md:flex-row">
           <Button
             as={NextLink}
@@ -67,7 +112,7 @@ export const Hero = () => {
                 strokeWidth={2}
               />
             }
-            href="/docs/guide/introduction"
+            href="/signup"
             radius="full"
             size="lg"
             onPress={() => {
@@ -75,11 +120,11 @@ export const Hero = () => {
                 name: "Get Started",
                 action: "click",
                 category: "landing-page",
-                data: "/docs/guide/introduction",
+                data: "/signup",
               });
             }}
           >
-            Get Started
+            Show me
           </Button>
           <Snippet
             className="hidden w-full rounded-full md:flex sm:w-auto"
@@ -121,7 +166,7 @@ export const Hero = () => {
         </div>
       </div>
 
-      <FloatingComponents />
+
 
       <BgLooper />
     </section>

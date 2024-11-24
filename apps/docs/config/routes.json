@@ -480,6 +480,12 @@
           "path": "/figma"
         },
         {
+          "key": "signup",
+          "title": "Signup",
+          "keywords": "signup, nextui, design, ui kit",
+          "path": "/signup"
+        },
+        {
           "key": "roadmap",
           "title": "Roadmap",
           "keywords": "roadmap, nextui",
