@@ -2,12 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { GrPowerReset } from "react-icons/gr";
-import { Card, Tooltip } from "@nextui-org/react";
-import { FaInfoCircle } from "react-icons/fa";
-import dynamic from "next/dynamic";
-
-// Dynamically import FullscreenWarp to prevent SSR issues
-const FullscreenWarp = dynamic(() => import("./fullscreenwarp"), { ssr: false });
 
 // Attach Icon Component
 const AttachIcon = () => (
@@ -95,10 +89,7 @@ const useTypingEffect = (
 };
 
 const SignupPage = () => {
-  // Warp State
-  const [showWarp, setShowWarp] = useState(false);
-
-  // States for Form
+  // States
   const [progress, setProgress] = useState<ProgressEntry[]>([]);
   const [currentInput, setCurrentInput] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -132,8 +123,6 @@ const SignupPage = () => {
 
   // Handle Input Submission (for both text and file uploads)
   const handleInputSubmit = () => {
-    if (step === 0) return; // Prevent submission before typing effect
-
     const currentStep = steps[step - 1];
 
     if (currentStep.type === "input") {
@@ -204,67 +193,43 @@ const SignupPage = () => {
     };
   }, [progress]);
 
-  // Handle Warp Completion
-  const handleWarpComplete = () => {
-    window.location.href = "/dashboard"; // Redirect to the dashboard after warp
-  };
-
-  // If warp is active, render FullscreenWarp
-  if (showWarp) {
-    return <FullscreenWarp onWarpComplete={handleWarpComplete} />;
-  }
-
   return (
-    <section className="flex flex-col items-center bg-black text-green-400 min-h-screen px-4 sm:px-6 lg:px-8 py-8 relative">
+    <section className="flex flex-col items-center bg-black text-green-400 min-h-screen px-4 sm:px-6 lg:px-8 py-8">
       {/* Heading with Typing Effect Positioned Above Input Box */}
       <h1 className="text-3xl text-white mb-6">
         {typedText}
       </h1>
 
       {/* Main Content */}
-      <main className="w-full max-w-md flex flex-col space-y-4 z-10">
+      <main className="w-full max-w-md flex flex-col space-y-4">
         {/* Input Area */}
-        {step <= steps.length ? (
-          <div className="relative">
-            <div className="flex flex-col bg-gray-800 rounded-lg p-4">
-              {/* Top Row: Input Field or Upload Prompt */}
-              <div className="flex-1">
-                {steps[step - 1]?.type === "input" ? (
-                  <textarea
-                    placeholder={steps[step - 1]?.placeholder}
-                    value={currentInput}
-                    onChange={(e) => setCurrentInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    rows={2}
-                    className="w-full h-12 bg-gray-700 text-white px-4 py-2 focus:outline-none rounded-lg resize-none"
-                  ></textarea>
-                ) : steps[step - 1]?.type === "upload" ? (
-                  <div>
-                    <label
-                      htmlFor={`file-input-${step}`}
-                      className="cursor-pointer flex items-center justify-between bg-gray-700 px-4 py-2 rounded-lg"
-                    >
-                      <span className="text-sm text-gray-300">
-                        {selectedFile ? selectedFile.name : steps[step - 1]?.placeholder}
-                      </span>
-                      <AttachIcon />
-                    </label>
-                    <input
-                      type="file"
-                      id={`file-input-${step}`}
-                      className="hidden"
-                      onChange={handleFileChange}
-                    />
-                  </div>
-                ) : null}
-              </div>
+        <div className="relative">
+          <div className="flex flex-col bg-gray-200 rounded-lg p-4">
+            {/* Top Row: Input Field or Upload Prompt */}
+            <div className="flex-1">
+              {steps[step - 1]?.type === "input" ? (
+                <textarea
+                  placeholder={steps[step - 1]?.placeholder}
+                  value={currentInput}
+                  onChange={(e) => setCurrentInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  rows={2}
+                  className="w-full h-12 bg-gray-200 text-black px-4 py-2 focus:outline-none rounded-lg resize-none"
+                ></textarea>
+              ) : steps[step - 1]?.type === "upload" ? (
+                <p className="text-sm text-gray-500">
+                  {selectedFile ? selectedFile.name : steps[step - 1]?.placeholder}
+                </p>
+              ) : null}
+            </div>
 
-              {/* Bottom Row: Icons */}
-              <div className="flex justify-between mt-4">
-                {/* Left Icons: Attach and Reset */}
-                <div className="flex space-x-2">
-                  {/* Attach Icon */}
-                  {steps[step - 1]?.type === "upload" ? (
+            {/* Bottom Row: Icons */}
+            <div className="flex justify-between mt-4">
+              {/* Left Icons: Attach and Reset */}
+              <div className="flex space-x-2">
+                {/* Attach Icon */}
+                {steps[step - 1]?.type === "upload" ? (
+                  <>
                     <label htmlFor={`file-input-${step}`} className="cursor-pointer flex items-center justify-center" aria-label="Attach file">
                       <div className="bg-black rounded-full w-10 h-10 flex items-center justify-center">
                         <AttachIcon />
@@ -276,35 +241,35 @@ const SignupPage = () => {
                         onChange={handleFileChange}
                       />
                     </label>
-                  ) : (
-                    // Inactive Attach Icon for text prompts
-                    <div className="bg-black rounded-full w-10 h-10 flex items-center justify-center opacity-50">
-                      <AttachIcon />
-                    </div>
-                  )}
+                  </>
+                ) : (
+                  // Inactive Attach Icon for text prompts
+                  <div className="bg-black rounded-full w-10 h-10 flex items-center justify-center opacity-50">
+                    <AttachIcon />
+                  </div>
+                )}
 
-                  {/* Reset Icon */}
-                  <button
-                    onClick={handleReset}
-                    className="bg-black rounded-full w-10 h-10 flex items-center justify-center cursor-pointer"
-                    aria-label="Reset input"
-                  >
-                    <GrPowerReset className="text-white" size={16} />
-                  </button>
-                </div>
-
-                {/* Submit Icon: Always Visible */}
+                {/* Reset Icon */}
                 <button
-                  onClick={handleInputSubmit}
+                  onClick={handleReset}
                   className="bg-black rounded-full w-10 h-10 flex items-center justify-center cursor-pointer"
-                  aria-label="Submit input"
+                  aria-label="Reset input"
                 >
-                  <SubmitIcon />
+                  <GrPowerReset className="text-white" size={16} />
                 </button>
               </div>
+
+              {/* Submit Icon: Always Visible */}
+              <button
+                onClick={handleInputSubmit}
+                className="bg-black rounded-full w-10 h-10 flex items-center justify-center cursor-pointer"
+                aria-label="Submit input"
+              >
+                <SubmitIcon />
+              </button>
             </div>
           </div>
-        ) : null}
+        </div>
 
         {/* Progress Bar Positioned Below Input Box and Above Progress Panel */}
         <div className="w-full mb-6">
@@ -350,20 +315,7 @@ const SignupPage = () => {
             </div>
           ))}
         </div>
-
-        {/* Submit Button (Visible After All Steps Are Completed) */}
-        {progress.length === steps.length && (
-          <button
-            onClick={() => setShowWarp(true)}
-            className="mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg py-3 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 transition-colors duration-300"
-          >
-            Submit
-          </button>
-        )}
       </main>
-
-      {/* Optional: Overlay for Fullscreen Warp */}
-      {/* The FullscreenWarp component is rendered conditionally above */}
     </section>
   );
 };
