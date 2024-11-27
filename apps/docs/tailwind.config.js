@@ -64,7 +64,6 @@ module.exports = {
         sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
         serif: defaultTheme.fontFamily.serif,
         mono: defaultTheme.fontFamily.mono,
-        arcade: ['"Press Start 2P"', 'cursive', 'sans-serif'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
