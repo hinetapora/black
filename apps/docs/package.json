@@ -48,6 +48,8 @@
     "@react-stately/data": "3.11.4",
     "@react-stately/layout": "3.13.9",
     "@react-stately/tree": "3.8.1",
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/postprocessing": "^2.16.3",
     "@rehooks/local-storage": "^2.4.5",
     "canvas-confetti": "^1.9.2",
     "cmdk": "^0.2.0",
