@@ -365,13 +365,16 @@ importers:
         version: 3.8.1(react@18.3.1)
       '@react-three/fiber':
         specifier: ^8.17.10
-        version: 8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0)
       '@react-three/postprocessing':
         specifier: ^2.16.3
-        version: 2.16.3(@react-three/fiber@8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/three@0.170.0)(react@18.3.1)
+        version: 2.16.3(@react-three/fiber@8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0))(@types/three@0.170.0)(react@18.3.1)(three@0.170.0)
       '@rehooks/local-storage':
         specifier: ^2.4.5
         version: 2.4.5(react@18.3.1)
+      '@types/three':
+        specifier: ^0.170.0
+        version: 0.170.0
       canvas-confetti:
         specifier: ^1.9.2
         version: 1.9.3
@@ -452,7 +455,7 @@ importers:
         version: 1.0.2
       react-three:
         specifier: ^0.9.7
-        version: 0.9.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 0.9.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0)
       react-wrap-balancer:
         specifier: ^1.0.0
         version: 1.1.1(react@18.3.1)
@@ -495,6 +498,9 @@ importers:
       tailwind-variants:
         specifier: ^0.1.20
         version: 0.1.20(tailwindcss@3.4.15(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@20.2.5)(typescript@5.6.3)))
+      three:
+        specifier: ^0.170.0
+        version: 0.170.0
       unified:
         specifier: ^11.0.5
         version: 11.0.5
@@ -14980,6 +14986,9 @@ packages:
     peerDependencies:
       three: '>=0.128.0'
 
+  three@0.170.0:
+    resolution: {integrity: sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==}
+
   through2@2.0.5:
     resolution: {integrity: sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==}
 
@@ -20360,7 +20369,7 @@ snapshots:
       '@swc/helpers': 0.5.15
       react: 18.3.1
 
-  '@react-three/fiber@8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@react-three/fiber@8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@types/debounce': 1.2.4
@@ -20374,19 +20383,21 @@ snapshots:
       react-reconciler: 0.27.0(react@18.3.1)
       scheduler: 0.21.0
       suspend-react: 0.1.3(react@18.3.1)
+      three: 0.170.0
       zustand: 3.7.2(react@18.3.1)
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
 
-  '@react-three/postprocessing@2.16.3(@react-three/fiber@8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/three@0.170.0)(react@18.3.1)':
+  '@react-three/postprocessing@2.16.3(@react-three/fiber@8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0))(@types/three@0.170.0)(react@18.3.1)(three@0.170.0)':
     dependencies:
-      '@react-three/fiber': 8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@react-three/fiber': 8.17.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0)
       buffer: 6.0.3
-      maath: 0.6.0(@types/three@0.170.0)
-      n8ao: 1.9.3(postprocessing@6.36.4)
-      postprocessing: 6.36.4
+      maath: 0.6.0(@types/three@0.170.0)(three@0.170.0)
+      n8ao: 1.9.3(postprocessing@6.36.4(three@0.170.0))(three@0.170.0)
+      postprocessing: 6.36.4(three@0.170.0)
       react: 18.3.1
-      three-stdlib: 2.34.0
+      three: 0.170.0
+      three-stdlib: 2.34.0(three@0.170.0)
     transitivePeerDependencies:
       - '@types/three'
 
@@ -26763,9 +26774,10 @@ snapshots:
 
   lz-string@1.5.0: {}
 
-  maath@0.6.0(@types/three@0.170.0):
+  maath@0.6.0(@types/three@0.170.0)(three@0.170.0):
     dependencies:
       '@types/three': 0.170.0
+      three: 0.170.0
 
   magic-string@0.25.9:
     dependencies:
@@ -27902,9 +27914,10 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  n8ao@1.9.3(postprocessing@6.36.4):
+  n8ao@1.9.3(postprocessing@6.36.4(three@0.170.0))(three@0.170.0):
     dependencies:
-      postprocessing: 6.36.4
+      postprocessing: 6.36.4(three@0.170.0)
+      three: 0.170.0
 
   nanoid@3.3.7: {}
 
@@ -28769,7 +28782,9 @@ snapshots:
       posthtml-parser: 0.11.0
       posthtml-render: 3.0.0
 
-  postprocessing@6.36.4: {}
+  postprocessing@6.36.4(three@0.170.0):
+    dependencies:
+      three: 0.170.0
 
   potpack@1.0.2: {}
 
@@ -29228,12 +29243,13 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  react-three@0.9.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-three@0.9.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(three@0.170.0):
     dependencies:
       fbjs: 0.8.18
       object-assign: 4.1.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+      three: 0.170.0
 
   react-wrap-balancer@1.1.1(react@18.3.1):
     dependencies:
@@ -30605,7 +30621,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  three-stdlib@2.34.0:
+  three-stdlib@2.34.0(three@0.170.0):
     dependencies:
       '@types/draco3d': 1.4.10
       '@types/offscreencanvas': 2019.7.3
@@ -30613,6 +30629,9 @@ snapshots:
       draco3d: 1.5.7
       fflate: 0.6.10
       potpack: 1.0.2
+      three: 0.170.0
+
+  three@0.170.0: {}
 
   through2@2.0.5:
     dependencies:
