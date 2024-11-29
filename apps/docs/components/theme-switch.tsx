@@ -21,18 +21,18 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({className, classNames}) => {
   const posthog = usePostHog();
 
   const onChange = () => {
-    theme === "light" ? setTheme("dark") : setTheme("light");
+    theme === "dark" ? setTheme("light") : setTheme("dark");
 
     posthog.capture("ThemeChange", {
       action: "click",
       category: "theme",
-      data: theme === "light" ? "dark" : "light",
+      data: theme === "dark" ? "light" : "dark",
     });
   };
 
   const {Component, slots, isSelected, getBaseProps, getInputProps, getWrapperProps} = useSwitch({
-    isSelected: theme === "light",
-    "aria-label": `Switch to ${theme === "light" ? "dark" : "light"} mode`,
+    isSelected: theme === "dark",
+    "aria-label": `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
     onChange,
   });
 
