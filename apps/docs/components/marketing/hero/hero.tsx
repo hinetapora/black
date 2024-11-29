@@ -66,7 +66,7 @@ export const Hero = () => {
                 strokeWidth={2}
               />
             }
-            href="/docs/guide/introduction"
+            href="/signup"
             radius="full"
             size="lg"
             onPress={() => {
