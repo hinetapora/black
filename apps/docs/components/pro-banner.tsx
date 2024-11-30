@@ -91,18 +91,18 @@ export const ProBanner = () => {
               color: "transparent",
             }}
           >
-            Ship faster with beautiful components
+            Up & Running 🏃 in 60 Mins ⏰
           </span>
         </a>
         <a
           className="flex group min-w-[120px] items-center font-semibold text-foreground shadow-sm gap-1.5 relative overflow-hidden rounded-full p-[1px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-          href="https://nextui.pro?utm_source=nextui.org&utm_medium=top-banner"
+          href="/signup"
           rel="noopener noreferrer"
           onClick={handleClick}
         >
           <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#F54180_0%,#338EF7_50%,#F54180_100%)]" />
           <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-background group-hover:bg-background/70 transition-background px-3 py-1 text-sm font-medium text-foreground backdrop-blur-3xl">
-            NextUI Pro
+            Get Started
             <Icon
               aria-hidden="true"
               className="outline-none transition-transform group-hover:translate-x-0.5 [&>path]:stroke-[2px]"

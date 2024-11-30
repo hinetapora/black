@@ -137,13 +137,13 @@ export const Navbar: FC = () => {
         {/* Right section: My Account Link, Get CicadaVPN Button, and Theme Switch */}
         <NavbarContent className="basis-1/4 flex gap-4 bg-transparent items-center justify-end">
           <NavbarItem className="flex h-full items-center ml-auto hidden md:flex">
-            <ThemeSwitch className="flex items-center" />
+            {/* <ThemeSwitch className="flex items-center" /> */}
           </NavbarItem>
 
           <NavbarItem className="flex h-full items-center hidden md:flex">
             <NextLink href="/account" passHref legacyBehavior>
               <Link className={clsx(navLinkClasses, "flex items-center")} color="foreground">
-                My Account
+                My Dashboard
               </Link>
             </NextLink>
           </NavbarItem>
@@ -165,7 +165,7 @@ export const Navbar: FC = () => {
                 radius="full"
                 size="lg"
               >
-                Get 83% Off
+                Get Started in 60s
               </Button>
             </NextLink>
           </NavbarItem>

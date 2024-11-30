@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Card, Tooltip } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import SocialProfile from "@/components/SocialProfile";
+
 const BgLooper = dynamic(() => import("./bg-looper").then((mod) => mod.BgLooper), {
   ssr: false,
 });
@@ -69,19 +70,36 @@ const TickIcon = () => (
 );
 
 // Progress Entry Interfaces
-interface InputProgressEntry {
+interface ProgressInputEntry {
   type: "input";
   label: string;
   value: string;
 }
 
-interface UploadProgressEntry {
+interface ProgressUploadEntry {
   type: "upload";
   label: string;
   value: string | File;
 }
 
-type ProgressEntry = InputProgressEntry | UploadProgressEntry;
+type ProgressEntry = ProgressInputEntry | ProgressUploadEntry;
+
+// Step Interfaces
+interface StepInput {
+  type: "input";
+  label: string;
+  placeholder: string;
+  helperText?: React.ReactNode; // Changed to React.ReactNode
+}
+
+interface StepUpload {
+  type: "upload";
+  label: string;
+  placeholder: string;
+  helperText?: React.ReactNode; // Changed to React.ReactNode
+}
+
+type Step = StepInput | StepUpload;
 
 // Typing Effect Hook for Single Line
 const useTypingEffect = (
@@ -119,14 +137,62 @@ const useTypingEffect = (
   return [typedText, isTypingComplete];
 };
 
+// Validation helper functions
+
+/**
+ * Validates the brand name.
+ * @param name - The brand name input.
+ * @returns An error message if invalid, otherwise an empty string.
+ */
+const validateBrandName = (name: string): string => {
+  if (name.length > 13) {
+    return "Brand name must be 13 characters or fewer.";
+  }
+  return "";
+};
+
+/**
+ * Validates social handles.
+ * @param handle - The social handle input.
+ * @param platform - The social platform (e.g., "twitter").
+ * @returns An error message if invalid, otherwise an empty string.
+ */
+const validateSocialHandle = (handle: string, platform: string): string => {
+  if (!handle.startsWith("@")) {
+    return "Handle must start with '@'.";
+  }
+
+  const actualHandle = handle.slice(1); // Strip the '@' for further validation
+
+  // Define regex patterns for different platforms
+  const patterns: Record<string, RegExp> = {
+    instagram: /^([A-Za-z0-9_.]{1,30})$/,
+    tiktok: /^([A-Za-z0-9_.]{2,24})$/,
+    twitter: /^([A-Za-z0-9_]{1,15})$/,
+  };
+
+  const regex = patterns[platform.toLowerCase()];
+  if (!regex) {
+    return "Invalid social platform.";
+  }
+
+  if (!regex.test(actualHandle)) {
+    return `Invalid ${platform} handle format.`;
+  }
+
+  return "";
+};
+
 // Reusable InputField Component
 const InputField: React.FC<{
   label: string;
   placeholder: string;
+  helperText?: React.ReactNode; // Changed to React.ReactNode
+  errorText?: string; // New prop for error messages
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-}> = ({ label, placeholder, value, onChange, onKeyDown }) => (
+}> = ({ label, placeholder, helperText, errorText, value, onChange, onKeyDown }) => (
   <div className="mb-4">
     <label htmlFor={label} className="sr-only">
       {label}
@@ -139,8 +205,20 @@ const InputField: React.FC<{
       onKeyDown={onKeyDown}
       rows={2}
       required
-      className="w-full h-12 bg-gray-700 text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg resize-none dark:bg-gray-800 dark:text-gray-100 dark:focus:ring-blue-400"
+      className={`w-full h-12 bg-gray-700 text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg resize-none dark:bg-gray-500 dark:text-gray-100 dark:focus:ring-blue-400 ${
+        errorText ? "focus:ring-red-500" : ""
+      }`}
     ></textarea>
+    {helperText && !errorText && (
+      <p className="mt-1 text-sm text-gray-400 dark:text-gray-300">
+        {helperText}
+      </p>
+    )}
+    {errorText && (
+      <p className="mt-1 text-sm text-red-500" aria-live="assertive">
+        {errorText}
+      </p>
+    )}
   </div>
 );
 
@@ -148,9 +226,11 @@ const InputField: React.FC<{
 const UploadField: React.FC<{
   label: string;
   placeholder: string;
+  helperText?: React.ReactNode; // Changed to React.ReactNode
+  errorText?: string; // Optional, if you want to add upload-specific errors
   selectedFile: File | null;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ label, placeholder, selectedFile, onFileChange }) => (
+}> = ({ label, placeholder, helperText, errorText, selectedFile, onFileChange }) => (
   <div className="mb-4">
     <label
       htmlFor={`file-input-${label}`}
@@ -167,6 +247,16 @@ const UploadField: React.FC<{
       className="hidden"
       onChange={onFileChange}
     />
+    {helperText && !errorText && (
+      <p className="mt-1 text-sm text-gray-400 dark:text-gray-300">
+        {helperText}
+      </p>
+    )}
+    {errorText && (
+      <p className="mt-1 text-sm text-red-500" aria-live="assertive">
+        {errorText}
+      </p>
+    )}
   </div>
 );
 
@@ -190,7 +280,11 @@ const ProgressEntryDisplay: React.FC<{ entry: ProgressEntry }> = ({ entry }) => 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (entry.type === "upload" && entry.value instanceof File && entry.value.type.startsWith("image/")) {
+    if (
+      entry.type === "upload" &&
+      entry.value instanceof File &&
+      entry.value.type.startsWith("image/")
+    ) {
       const url = URL.createObjectURL(entry.value);
       setPreviewUrl(url);
       return () => {
@@ -208,12 +302,15 @@ const ProgressEntryDisplay: React.FC<{ entry: ProgressEntry }> = ({ entry }) => 
               <strong>{entry.label}:</strong> {entry.value}
             </p>
             {/* Render SocialProfile for social handles */}
-            {["Instagram", "TikTok", "Twitter"].includes(entry.label) && entry.value !== "No input provided" && (
-              <SocialProfile
-                platform={entry.label.toLowerCase() as "instagram" | "tiktok" | "twitter"}
-                handle={entry.value}
-              />
-            )}
+            {["Instagram", "TikTok", "Twitter"].includes(entry.label) &&
+              entry.value !== "No input provided" && (
+                <SocialProfile
+                  platform={
+                    entry.label.toLowerCase() as "instagram" | "tiktok" | "twitter"
+                  }
+                  handle={entry.value}
+                />
+              )}
           </>
         ) : entry.type === "upload" ? (
           typeof entry.value === "string" ? (
@@ -225,8 +322,12 @@ const ProgressEntryDisplay: React.FC<{ entry: ProgressEntry }> = ({ entry }) => 
               <p className="text-gray-200 dark:text-gray-100">
                 <strong>{entry.label}:</strong> {entry.value.name}
               </p>
-              <p className="text-gray-200 dark:text-gray-100">Size: {Math.round(entry.value.size / 1024)} KB</p>
-              <p className="text-gray-200 dark:text-gray-100">Type: {entry.value.type}</p>
+              <p className="text-gray-200 dark:text-gray-100">
+                Size: {Math.round(entry.value.size / 1024)} KB
+              </p>
+              <p className="text-gray-200 dark:text-gray-100">
+                Type: {entry.value.type}
+              </p>
               {/* Display Image Preview */}
               {previewUrl && (
                 <img
@@ -254,27 +355,126 @@ const SignupPage = () => {
   const [currentInput, setCurrentInput] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [step, setStep] = useState(0); // Initialize to 0 for typing effect
+  const [errors, setErrors] = useState<Record<number, string>>({}); // New state for errors
 
   // Steps Definition
-  const steps: ProgressEntry[] = [
-    { type: "input", placeholder: "Enter your brand name", label: "Brand name", value: "" },
-    { type: "input", placeholder: "Enter your first name", label: "First name", value: "" },
-    { type: "input", placeholder: "Enter your last name", label: "Last name", value: "" },
-    { type: "input", placeholder: "Enter your Instagram handle (optional)", label: "Instagram", value: "" },
-    { type: "input", placeholder: "Enter your TikTok handle (optional)", label: "TikTok", value: "" },
-    { type: "input", placeholder: "Enter your Twitter handle (optional)", label: "Twitter", value: "" },
-    { type: "upload", placeholder: "Upload your Web Wide Logo Image (optional)", label: "Web Wide Logo Image", value: "" },
-    { type: "upload", placeholder: "Upload your App Square Logo Image (optional)", label: "App Square Logo Image", value: "" },
+  const steps: Step[] = [
+    {
+      type: "input",
+      placeholder: "Enter your brand name",
+      label: "Brand name",
+      helperText: (
+        <>
+          🚀 🚀  This sets the Brand Name used throughout your VPN service in your Appleᵀᴹ, Androidᵀᴹ & Microsoftᵀᴹ VPN apps, your VPN website, and in your VPN service emails & invoices. 
+          
+          While its easy enough to change it later in the dashboard, as it's your trading name, it's not something you want to change often as this can confuse your customers. 
+          <br /> 
+          <br />
+          Many social ⭐stars⭐ use their social handle or personal brand like <strong>@handleVPN</strong> or <strong>stream@handle</strong>. 
+          <br /> 
+          <br />
+          ⚠️ Limitations: App designs limit the number of Brand Name characters to max 13 characters.
+          
+          <br /> 
+          <br />
+          Checkout our reference site at{' '}
+          <a
+            href="https://cicadavpn.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 underline hover:text-blue-500"
+          >
+            https://cicadavpn.com
+          </a>{' '}
+          to see where the Brand Name "CicadaVPN" is applied - this will be replaced with your Brand Name as your website is built in the next 60 mins ⏰.
+        </>
+      ),
+    },
+    {
+      type: "input",
+      placeholder: "Enter your first name",
+      label: "First name",
+      helperText: "Your legal first name.",
+    },
+    {
+      type: "input",
+      placeholder: "Enter your last name",
+      label: "Last name",
+      helperText: "Your legal last name.",
+    },
+    {
+      type: "input",
+      placeholder: "Enter your Instagram handle (optional)",
+      label: "Instagram",
+      helperText:
+        "Provide your Instagram username in this format @handle. We use this to check eligibility and link your Instagram account into the dashboard.",
+    },
+    {
+      type: "input",
+      placeholder: "Enter your TikTok handle (optional)",
+      label: "TikTok",
+      helperText:
+        "Provide your TikTok username in this format @handle. We use this to check eligibility and link your TikTok account into the dashboard.",
+    },
+    {
+      type: "input",
+      placeholder: "Enter your Twitter handle (optional)",
+      label: "Twitter",
+      helperText:
+        "Provide your Twitter username in this format @handle. We use this to check eligibility and link your Twitter account into the dashboard.",
+    },
+    {
+      type: "upload",
+      placeholder: "Upload your Web Wide Logo Image (optional)",
+      label: "Web Wide Logo Image",
+      helperText: (
+        <>
+          Preferably in PNG or JPEG format, max size 2MB. We use this to add your brand to your new website. See{' '}
+          <a
+            href="https://cicadavpn.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 underline hover:text-blue-500"
+          >
+            https://cicadavpn.com
+          </a>{' '}
+          for our reference site. Your new site will look like this with custom branding images and with your own brand name applied. You can change this in your dashboard at any time.
+        </>
+      ),
+    },
+    {
+      type: "upload",
+      placeholder: "Upload your App Square Logo Image (optional)",
+      label: "App Square Logo Image",
+      helperText: (
+        <>
+          Preferably in PNG or JPEG format, max size 2MB. We use this to add your brand to your new Apple, Google, and Microsoft Apps. See{' '}
+          <a
+            href="https://cicadavpn.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 underline hover:text-blue-500"
+          >
+            https://cicadavpn.com
+          </a>{' '}
+          for our reference apps. Your new apps will be custom branded with this image. You can change this in your dashboard at any time, and the change will flow through to the apps when your clients next log in.
+        </>
+      ),
+    },
     // Removed Web Hero Image upload step
   ];
 
   // Define two separate lines (Fixed typos)
-  const firstLine = "Weelcome to Cicada Private Label!";
-  const secondLine = "Leet's begin the adventure";
+  const firstLine = "Weelcome to VPN Private Label";
+  const secondLine = "Leet's get started.";
 
   // Use Typing Effect Hook for both lines
   const [typedText1, isTypingComplete1] = useTypingEffect(firstLine, 50, step === 0);
-  const [typedText2, isTypingComplete2] = useTypingEffect(secondLine, 50, step === 1 && isTypingComplete1);
+  const [typedText2, isTypingComplete2] = useTypingEffect(
+    secondLine,
+    50,
+    step === 1 && isTypingComplete1
+  );
 
   // Move the step to 1 when the first line completes
   useEffect(() => {
@@ -295,43 +495,91 @@ const SignupPage = () => {
     if (step < 2) return; // Prevent submission before typing effect
 
     const currentStep = steps[step - 2];
+    let errorMessage = "";
 
     if (currentStep.type === "input") {
-      // Basic validation for required fields
-      if (["Brand name", "First name", "Last name"].includes(currentStep.label) && !currentInput.trim()) {
-        alert(`${currentStep.label} is required.`);
+      if (["Brand name", "First name", "Last name"].includes(currentStep.label)) {
+        if (!currentInput.trim()) {
+          errorMessage = `${currentStep.label} is required.`;
+        }
+
+        if (currentStep.label === "Brand name") {
+          const brandError = validateBrandName(currentInput.trim());
+          if (brandError) {
+            errorMessage = brandError;
+          }
+        }
+      }
+
+      // If it's a social handle, validate accordingly
+      if (["Instagram", "TikTok", "Twitter"].includes(currentStep.label)) {
+        const platform = currentStep.label.toLowerCase();
+        errorMessage = validateSocialHandle(currentInput.trim(), platform);
+      }
+
+      if (errorMessage) {
+        setErrors((prev) => ({ ...prev, [step - 2]: errorMessage }));
         return;
+      } else {
+        setErrors((prev) => {
+          const updated = { ...prev };
+          delete updated[step - 2];
+          return updated;
+        });
+      }
+
+      // Prepare the value to store
+      let valueToStore = currentInput.trim();
+      if (["Instagram", "TikTok", "Twitter"].includes(currentStep.label)) {
+        valueToStore = currentInput.trim().startsWith("@")
+          ? currentInput.trim().slice(1)
+          : currentInput.trim();
       }
 
       setProgress((prev) => [
         ...prev,
-        { type: "input", label: currentStep.label, value: currentInput.trim() || "No input provided" },
+        {
+          type: "input",
+          label: currentStep.label,
+          value: valueToStore || "No input provided",
+        },
       ]);
       setCurrentInput("");
     } else if (currentStep.type === "upload") {
+      // Optional: Add validation for uploads if necessary
       if (selectedFile) {
         setProgress((prev) => [
           ...prev,
-          { type: "upload", label: currentStep.label, value: selectedFile },
+          {
+            type: "upload",
+            label: currentStep.label,
+            value: selectedFile,
+          },
         ]);
         setSelectedFile(null);
       } else {
         // If upload is optional and no file is selected, proceed to next step
         setProgress((prev) => [
           ...prev,
-          { type: "upload", label: currentStep.label, value: "No file uploaded" },
+          {
+            type: "upload",
+            label: currentStep.label,
+            value: "No file uploaded",
+          },
         ]);
       }
     }
 
     // Proceed to next step
-    if (step < steps.length + 2) { // Adjusted for typing steps
+    if (step < steps.length + 2) {
       setStep((prev) => prev + 1);
     }
   };
 
   // Handle key down event for Enter key
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent default behavior
       handleInputSubmit();
@@ -354,10 +602,20 @@ const SignupPage = () => {
     } else if (currentStep.type === "upload") {
       setSelectedFile(null);
     }
+
+    // Clear any existing errors for the current step
+    setErrors((prev) => {
+      const updated = { ...prev };
+      delete updated[step - 2];
+      return updated;
+    });
   };
 
   // Calculate progress percentage for the linear progress bar
-  const progressPercentage = Math.min((progress.length / steps.length) * 100, 100);
+  const progressPercentage = Math.min(
+    (progress.length / steps.length) * 100,
+    100
+  );
 
   // Cleanup object URLs to prevent memory leaks
   useEffect(() => {
@@ -383,7 +641,7 @@ const SignupPage = () => {
   return (
     <section className="relative flex flex-col items-center text-white min-h-screen px-4 sm:px-6 lg:px-8 py-8 bg-gradient-to-br from-blue-400 via-purple-500 to-blue-800 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
       {/* Content Container */}
-      <div className="relative z-10 flex flex-col items-center w-full max-w-xl md:max-w-2xl">
+      <div className="relative z-10 md:mt-6 flex flex-col items-center w-full max-w-xl md:max-w-2xl">
         {/* Form Card */}
         <Card className="bg-gray-700 bg-opacity-80 dark:bg-gray-800 dark:bg-opacity-80 rounded-lg p-6 shadow-lg w-full">
           {/* Heading with Typing Effect Positioned Above Input Box */}
@@ -402,14 +660,46 @@ const SignupPage = () => {
                   <InputField
                     label={steps[step - 2].label}
                     placeholder={steps[step - 2].placeholder}
+                    helperText={steps[step - 2].helperText} // Pass helperText
+                    errorText={errors[step - 2]} // Pass errorText
                     value={currentInput}
-                    onChange={(e) => setCurrentInput(e.target.value)}
+                    onChange={(e) => {
+                      setCurrentInput(e.target.value);
+
+                      // Perform real-time validation
+                      const currentStep = steps[step - 2];
+                      let errorMessage = "";
+
+                      if (currentStep.type === "input") {
+                        if (["Brand name", "First name", "Last name"].includes(currentStep.label)) {
+                          if (currentStep.label === "Brand name") {
+                            errorMessage = validateBrandName(e.target.value.trim());
+                          }
+                        }
+
+                        if (["Instagram", "TikTok", "Twitter"].includes(currentStep.label)) {
+                          const platform = currentStep.label.toLowerCase();
+                          errorMessage = validateSocialHandle(e.target.value.trim(), platform);
+                        }
+                      }
+
+                      if (errorMessage) {
+                        setErrors((prev) => ({ ...prev, [step - 2]: errorMessage }));
+                      } else {
+                        setErrors((prev) => {
+                          const updated = { ...prev };
+                          delete updated[step - 2];
+                          return updated;
+                        });
+                      }
+                    }}
                     onKeyDown={handleKeyDown}
                   />
                 ) : steps[step - 2]?.type === "upload" ? (
                   <UploadField
                     label={steps[step - 2].label}
                     placeholder={steps[step - 2].placeholder}
+                    helperText={steps[step - 2].helperText} // Pass helperText
                     selectedFile={selectedFile}
                     onFileChange={handleFileChange}
                   />
@@ -463,8 +753,9 @@ const SignupPage = () => {
                   onClick={handleInputSubmit}
                   className={`flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg py-2 px-4 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-700 transition-colors duration-300 ${
                     (steps[step - 2]?.type === "input" &&
-                      !currentInput.trim() &&
-                      ["Brand name", "First name", "Last name"].includes(steps[step - 2].label)) ||
+                      (!currentInput.trim() ||
+                        (["Brand name", "Instagram", "TikTok", "Twitter"].includes(steps[step - 2]?.label) &&
+                          errors[step - 2]))) ||
                     (steps[step - 2]?.type === "upload" && !selectedFile)
                       ? "opacity-50 cursor-not-allowed"
                       : ""
@@ -472,8 +763,9 @@ const SignupPage = () => {
                   aria-label="Continue"
                   disabled={
                     (steps[step - 2]?.type === "input" &&
-                      !currentInput.trim() &&
-                      ["Brand name", "First name", "Last name"].includes(steps[step - 2].label)) ||
+                      (!currentInput.trim() ||
+                        (["Brand name", "Instagram", "TikTok", "Twitter"].includes(steps[step - 2]?.label) &&
+                          errors[step - 2]))) ||
                     (steps[step - 2]?.type === "upload" && !selectedFile)
                   }
                 >
@@ -484,9 +776,7 @@ const SignupPage = () => {
           )}
 
           {/* Progress Bar with Percentage */}
-          {step >= 2 && (
-            <ProgressBar percentage={progressPercentage} />
-          )}
+          {step >= 2 && <ProgressBar percentage={progressPercentage} />}
 
           {/* Progress Section */}
           {progress.length > 0 && (

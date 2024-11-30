@@ -28,8 +28,8 @@ export const Hero = () => {
   };
 
   return (
-    <section className="flex relative overflow-hidden lg:overflow-visible w-full flex-nowrap justify-between items-center h-[calc(100vh_-_64px)] 2xl:h-[calc(84vh_-_64px)]">
-      <div className="relative z-20 flex flex-col w-full gap-6 lg:w-1/2 xl:mt-10">
+    <section className="flex relative overflow-hidden lg:overflow-visible w-full flex-nowrap justify-between items-center h-[calc(100vh_-_24px)] 2xl:h-[calc(84vh_-_64px)]">
+      <div className="relative z-20 flex flex-col w-full gap-6 lg:w-1/2 xl:mt-5">
         <div className="flex justify-center w-full md:hidden">
           <Chip
             as={NextLink}
@@ -46,16 +46,20 @@ export const Hero = () => {
           </Chip>
         </div>
         <div className="leading-8 text-center md:leading-10 md:text-left">
-          <div className="inline-block">
-            <h1 className={title()}>Leverage your&nbsp;</h1>
-            <h1 className={title({ color: "violet" })}>powerful&nbsp;</h1>
+          <div className="inline-block mb-6">
+            <h1 className={title()}>Your&nbsp;</h1>
+            <h1 className={title({ color: "violet" })}>Powerful Brand,&nbsp;</h1>
+            <h1 className={title()}>our Global Network. </h1>
           </div>
-          <h1 className={title()}>brand, our global network: Monetise your own&nbsp;</h1>
-          <h1 className={title({ color: "green" })}>beautiful VPN&nbsp;</h1>
+
+          <div className="inline-block">
+          <h1 className={title()}> 💰💰 Monetise your own&nbsp;</h1>
+          <h1 className={title({ color: "green" })}>Beautiful VPN Service&nbsp;</h1>
           <h1 className={title()}>right now.</h1>
+          </div>
         </div>
         <h2 className={subtitle({ fullWidth: true, class: "text-center md:text-left" })}>
-          Exclusive opportunity: Private label our global VPN to launch your own premium branded service today. Join for free with a 50/50 revenue share, up and running in 60 minutes. Limited slots available – apply now.
+        🚀 🚀 Exclusive opportunity: Private label our global VPN to launch your own premium branded service today. <strong>Join for free</strong> with a 50/50 revenue share, up and running 🏃 in 60 minutes ⏰. Limited slots available – apply now.
         </h2>
         <div className="flex flex-col items-center gap-4 md:flex-row">
           <Button
