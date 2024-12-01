@@ -10,6 +10,7 @@ import manifest from "@/config/routes.json";
 import {siteConfig} from "@/config/site";
 import {fontSans} from "@/config/fonts";
 import {Navbar} from "@/components/navbar";
+import Header from '@/components/dashboard/Header';
 import {Footer} from "@/components/footer";
 import {ProBanner} from "@/components/pro-banner";
 
@@ -69,8 +70,8 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <body className={clsx("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <Providers themeProps={{attribute: "class", defaultTheme: "dark"}}>
           <div className="relative flex flex-col" id="app-container">
-            <ProBanner />
-            <Navbar mobileRoutes={manifest.mobileRoutes} routes={manifest.routes} />
+
+            <Header />
             {children}
             <Footer />
           </div>

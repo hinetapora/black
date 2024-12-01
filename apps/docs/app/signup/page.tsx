@@ -2,72 +2,35 @@
 
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Tooltip } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 import SocialProfile from "@/components/SocialProfile";
 
-const BgLooper = dynamic(() => import("./bg-looper").then((mod) => mod.BgLooper), {
-  ssr: false,
-});
+// Import Reusable Components from app/signup/components/
+import InputField from "./components/InputField";
+import UploadField from "./components/UploadField";
+import ProgressBar from "./components/ProgressBar";
+import ProgressEntryDisplay from "./components/ProgressEntryDisplay";
+import { ResetIcon, AttachIcon } from "./components/Icons";
+
+// Import Custom Hook
+import useTypingEffect from "./hooks/useTypingEffect";
+
+// Import Validation Functions
+import { validateBrandName, validateSocialHandle } from "./utils/validation";
+
+// Import Icon from Iconify
+import { Icon } from "@iconify/react";
+import arrowRightIcon from "@iconify/icons-solar/arrow-right-linear";
 
 // Dynamically import FullscreenWarp to prevent SSR issues
 const FullscreenWarp = dynamic(() => import("./fullscreenwarp"), { ssr: false });
 
-// Custom SVG Icon Components
-const ResetIcon = () => (
-  <svg
-    stroke="currentColor"
-    fill="currentColor"
-    strokeWidth="0"
-    viewBox="0 0 24 24"
-    className="text-white dark:text-gray-200"
-    height="16"
-    width="16"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path
-      fill="none"
-      strokeWidth="2"
-      d="M20,8 C18.5974037,5.04031171 15.536972,3 12,3 C7.02943725,3 3,7.02943725 3,12 C3,16.9705627 7.02943725,21 12,21 L12,21 C16.9705627,21 21,16.9705627 21,12 M21,3 L21,9 L15,9"
-    ></path>
-  </svg>
-);
-
-const AttachIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className="text-white dark:text-gray-200"
-    width="16"
-    height="16"
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M9 7C9 4.23858 11.2386 2 14 2C16.7614 2 19 4.23858 19 7V15C19 18.866 15.866 22 12 22C8.13401 22 5 18.866 5 15V9C5 8.44772 5.44772 8 6 8C6.55228 8 7 8.44772 7 9V15C7 17.7614 9.23858 20 12 20C14.7614 20 17 17.7614 17 15V7C17 5.34315 15.6569 4 14 4C12.3431 4 11 5.34315 11 7V15C11 15.5523 11.4477 16 12 16C12.5523 16 13 15.5523 13 15V9C13 8.44772 13.44772 8 14 8C14.5523 8 15 8.44772 15 9V15C15 16.6569 13.6569 18 12 18C10.3431 18 9 16.6569 9 15V7Z"
-    ></path>
-  </svg>
-);
-
-const TickIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="h-5 w-5 text-green-400 dark:text-green-300"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
+// Dynamically import BgLooper
+const BgLooper = dynamic(() => import("./bg-looper").then((mod) => mod.BgLooper), {
+  ssr: false,
+});
 
 // Progress Entry Interfaces
 interface ProgressInputEntry {
@@ -84,267 +47,21 @@ interface ProgressUploadEntry {
 
 type ProgressEntry = ProgressInputEntry | ProgressUploadEntry;
 
-// Step Interfaces
+type Step = StepInput | StepUpload;
+
 interface StepInput {
   type: "input";
   label: string;
   placeholder: string;
-  helperText?: React.ReactNode; // Changed to React.ReactNode
+  helperText?: React.ReactNode;
 }
 
 interface StepUpload {
   type: "upload";
   label: string;
   placeholder: string;
-  helperText?: React.ReactNode; // Changed to React.ReactNode
+  helperText?: React.ReactNode;
 }
-
-type Step = StepInput | StepUpload;
-
-// Typing Effect Hook for Single Line
-const useTypingEffect = (
-  fullText: string,
-  speed: number = 100,
-  startTyping: boolean = true
-): [string, boolean] => {
-  const [typedText, setTypedText] = useState("");
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
-  const indexRef = useRef(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (!startTyping) return;
-
-    setTypedText("");
-    setIsTypingComplete(false);
-    indexRef.current = 0;
-
-    intervalRef.current = setInterval(() => {
-      if (indexRef.current < fullText.length) {
-        setTypedText((prev) => prev + fullText.charAt(indexRef.current));
-        indexRef.current += 1;
-      } else {
-        setIsTypingComplete(true);
-        if (intervalRef.current) clearInterval(intervalRef.current);
-      }
-    }, speed);
-
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [fullText, speed, startTyping]);
-
-  return [typedText, isTypingComplete];
-};
-
-// Validation helper functions
-
-/**
- * Validates the brand name.
- * @param name - The brand name input.
- * @returns An error message if invalid, otherwise an empty string.
- */
-const validateBrandName = (name: string): string => {
-  if (name.length > 13) {
-    return "Brand name must be 13 characters or fewer.";
-  }
-  return "";
-};
-
-/**
- * Validates social handles.
- * @param handle - The social handle input.
- * @param platform - The social platform (e.g., "twitter").
- * @returns An error message if invalid, otherwise an empty string.
- */
-const validateSocialHandle = (handle: string, platform: string): string => {
-  if (!handle.startsWith("@")) {
-    return "Handle must start with '@'.";
-  }
-
-  const actualHandle = handle.slice(1); // Strip the '@' for further validation
-
-  // Define regex patterns for different platforms
-  const patterns: Record<string, RegExp> = {
-    instagram: /^([A-Za-z0-9_.]{1,30})$/,
-    tiktok: /^([A-Za-z0-9_.]{2,24})$/,
-    twitter: /^([A-Za-z0-9_]{1,15})$/,
-  };
-
-  const regex = patterns[platform.toLowerCase()];
-  if (!regex) {
-    return "Invalid social platform.";
-  }
-
-  if (!regex.test(actualHandle)) {
-    return `Invalid ${platform} handle format.`;
-  }
-
-  return "";
-};
-
-// Reusable InputField Component
-const InputField: React.FC<{
-  label: string;
-  placeholder: string;
-  helperText?: React.ReactNode; // Changed to React.ReactNode
-  errorText?: string; // New prop for error messages
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-}> = ({ label, placeholder, helperText, errorText, value, onChange, onKeyDown }) => (
-  <div className="mb-4">
-    <label htmlFor={label} className="sr-only">
-      {label}
-    </label>
-    <textarea
-      id={label}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      onKeyDown={onKeyDown}
-      rows={2}
-      required
-      className={`w-full h-12 bg-gray-700 text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg resize-none dark:bg-gray-500 dark:text-gray-100 dark:focus:ring-blue-400 ${
-        errorText ? "focus:ring-red-500" : ""
-      }`}
-    ></textarea>
-    {helperText && !errorText && (
-      <p className="mt-1 text-sm text-gray-400 dark:text-gray-300">
-        {helperText}
-      </p>
-    )}
-    {errorText && (
-      <p className="mt-1 text-sm text-red-500" aria-live="assertive">
-        {errorText}
-      </p>
-    )}
-  </div>
-);
-
-// Reusable UploadField Component
-const UploadField: React.FC<{
-  label: string;
-  placeholder: string;
-  helperText?: React.ReactNode; // Changed to React.ReactNode
-  errorText?: string; // Optional, if you want to add upload-specific errors
-  selectedFile: File | null;
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}> = ({ label, placeholder, helperText, errorText, selectedFile, onFileChange }) => (
-  <div className="mb-4">
-    <label
-      htmlFor={`file-input-${label}`}
-      className="cursor-pointer flex items-center justify-between bg-gray-700 px-4 py-2 rounded-lg dark:bg-gray-800"
-    >
-      <span className="text-sm text-gray-300 dark:text-gray-200">
-        {selectedFile ? "File attached, ready to continue" : placeholder}
-      </span>
-      <AttachIcon />
-    </label>
-    <input
-      type="file"
-      id={`file-input-${label}`}
-      className="hidden"
-      onChange={onFileChange}
-    />
-    {helperText && !errorText && (
-      <p className="mt-1 text-sm text-gray-400 dark:text-gray-300">
-        {helperText}
-      </p>
-    )}
-    {errorText && (
-      <p className="mt-1 text-sm text-red-500" aria-live="assertive">
-        {errorText}
-      </p>
-    )}
-  </div>
-);
-
-// Progress Bar Component
-const ProgressBar: React.FC<{ percentage: number }> = ({ percentage }) => (
-  <div className="w-full mt-6 mb-2 flex items-center">
-    <div className="w-full mr-2">
-      <div className="h-2 bg-gray-600 rounded-full dark:bg-gray-700">
-        <div
-          className="h-2 bg-green-400 rounded-full transition-all duration-300 dark:bg-green-300"
-          style={{ width: `${percentage}%` }}
-        ></div>
-      </div>
-    </div>
-    <div className="text-sm text-gray-300 dark:text-gray-200">{percentage}%</div>
-  </div>
-);
-
-// Progress Entry Display Component
-const ProgressEntryDisplay: React.FC<{ entry: ProgressEntry }> = ({ entry }) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (
-      entry.type === "upload" &&
-      entry.value instanceof File &&
-      entry.value.type.startsWith("image/")
-    ) {
-      const url = URL.createObjectURL(entry.value);
-      setPreviewUrl(url);
-      return () => {
-        URL.revokeObjectURL(url);
-      };
-    }
-  }, [entry]);
-
-  return (
-    <div className="arcade-text-glow mb-4 p-4 bg-gray-700 bg-opacity-80 rounded-lg shadow-md flex items-center justify-between dark:bg-gray-800">
-      <div>
-        {entry.type === "input" ? (
-          <>
-            <p className="text-gray-200 dark:text-gray-100">
-              <strong>{entry.label}:</strong> {entry.value}
-            </p>
-            {/* Render SocialProfile for social handles */}
-            {["Instagram", "TikTok", "Twitter"].includes(entry.label) &&
-              entry.value !== "No input provided" && (
-                <SocialProfile
-                  platform={
-                    entry.label.toLowerCase() as "instagram" | "tiktok" | "twitter"
-                  }
-                  handle={entry.value}
-                />
-              )}
-          </>
-        ) : entry.type === "upload" ? (
-          typeof entry.value === "string" ? (
-            <p className="text-gray-200 dark:text-gray-100">
-              <strong>{entry.label}:</strong> {entry.value}
-            </p>
-          ) : (
-            <div>
-              <p className="text-gray-200 dark:text-gray-100">
-                <strong>{entry.label}:</strong> {entry.value.name}
-              </p>
-              <p className="text-gray-200 dark:text-gray-100">
-                Size: {Math.round(entry.value.size / 1024)} KB
-              </p>
-              <p className="text-gray-200 dark:text-gray-100">
-                Type: {entry.value.type}
-              </p>
-              {/* Display Image Preview */}
-              {previewUrl && (
-                <img
-                  src={previewUrl}
-                  alt={entry.value.name}
-                  className="mt-2 max-w-full h-auto rounded"
-                />
-              )}
-            </div>
-          )
-        ) : null}
-      </div>
-      {/* Tick Icon */}
-      <TickIcon />
-    </div>
-  );
-};
 
 const SignupPage = () => {
   // Warp State
@@ -365,19 +82,19 @@ const SignupPage = () => {
       label: "Brand name",
       helperText: (
         <>
-          🚀 🚀  This sets the Brand Name used throughout your VPN service in your Appleᵀᴹ, Androidᵀᴹ & Microsoftᵀᴹ VPN apps, your VPN website, and in your VPN service emails & invoices. 
-          
-          While its easy enough to change it later in the dashboard, as it's your trading name, it's not something you want to change often as this can confuse your customers. 
-          <br /> 
+          🚀 🚀 This sets the Brand Name used throughout your VPN service in your Appleᵀᴹ, Androidᵀᴹ & Microsoftᵀᴹ VPN apps, your VPN website, and in your VPN service emails & invoices.
           <br />
-          Many social ⭐stars⭐ use their social handle or personal brand like <strong>@handleVPN</strong> or <strong>stream@handle</strong>. 
-          <br /> 
+          <br />
+          While it's easy enough to change it later in the dashboard, as it's your trading name, it's not something you want to change often as this can confuse your customers.
+          <br />
+          <br />
+          Many social ⭐stars⭐ use their social handle or personal brand like <strong>@handleVPN</strong> or <strong>stream@handle</strong>.
+          <br />
           <br />
           ⚠️ Limitations: App designs limit the number of Brand Name characters to max 13 characters.
-          
-          <br /> 
           <br />
-          Checkout our reference site at{' '}
+          <br />
+          Checkout our reference site at{" "}
           <a
             href="https://cicadavpn.com"
             target="_blank"
@@ -385,7 +102,7 @@ const SignupPage = () => {
             className="text-blue-400 underline hover:text-blue-500"
           >
             https://cicadavpn.com
-          </a>{' '}
+          </a>{" "}
           to see where the Brand Name "CicadaVPN" is applied - this will be replaced with your Brand Name as your website is built in the next 60 mins ⏰.
         </>
       ),
@@ -429,7 +146,7 @@ const SignupPage = () => {
       label: "Web Wide Logo Image",
       helperText: (
         <>
-          Preferably in PNG or JPEG format, max size 2MB. We use this to add your brand to your new website. See{' '}
+          Preferably in PNG or JPEG format, max size 2MB. We use this to add your brand to your new website. See{" "}
           <a
             href="https://cicadavpn.com"
             target="_blank"
@@ -437,7 +154,7 @@ const SignupPage = () => {
             className="text-blue-400 underline hover:text-blue-500"
           >
             https://cicadavpn.com
-          </a>{' '}
+          </a>{" "}
           for our reference site. Your new site will look like this with custom branding images and with your own brand name applied. You can change this in your dashboard at any time.
         </>
       ),
@@ -448,7 +165,7 @@ const SignupPage = () => {
       label: "App Square Logo Image",
       helperText: (
         <>
-          Preferably in PNG or JPEG format, max size 2MB. We use this to add your brand to your new Apple, Google, and Microsoft Apps. See{' '}
+          Preferably in PNG or JPEG format, max size 2MB. We use this to add your brand to your new Apple, Google, and Microsoft Apps. See{" "}
           <a
             href="https://cicadavpn.com"
             target="_blank"
@@ -456,7 +173,7 @@ const SignupPage = () => {
             className="text-blue-400 underline hover:text-blue-500"
           >
             https://cicadavpn.com
-          </a>{' '}
+          </a>{" "}
           for our reference apps. Your new apps will be custom branded with this image. You can change this in your dashboard at any time, and the change will flow through to the apps when your clients next log in.
         </>
       ),
@@ -465,8 +182,8 @@ const SignupPage = () => {
   ];
 
   // Define two separate lines (Fixed typos)
-  const firstLine = "Weelcome to VPN Private Label";
-  const secondLine = "Leet's get started.";
+  const firstLine = "Weelcome to the VPN Agency Onboarding!";
+  const secondLine = "Leet's get you setup.";
 
   // Use Typing Effect Hook for both lines
   const [typedText1, isTypingComplete1] = useTypingEffect(firstLine, 50, step === 0);
@@ -671,20 +388,36 @@ const SignupPage = () => {
                       let errorMessage = "";
 
                       if (currentStep.type === "input") {
-                        if (["Brand name", "First name", "Last name"].includes(currentStep.label)) {
+                        if (
+                          ["Brand name", "First name", "Last name"].includes(
+                            currentStep.label
+                          )
+                        ) {
                           if (currentStep.label === "Brand name") {
-                            errorMessage = validateBrandName(e.target.value.trim());
+                            errorMessage = validateBrandName(
+                              e.target.value.trim()
+                            );
                           }
                         }
 
-                        if (["Instagram", "TikTok", "Twitter"].includes(currentStep.label)) {
+                        if (
+                          ["Instagram", "TikTok", "Twitter"].includes(
+                            currentStep.label
+                          )
+                        ) {
                           const platform = currentStep.label.toLowerCase();
-                          errorMessage = validateSocialHandle(e.target.value.trim(), platform);
+                          errorMessage = validateSocialHandle(
+                            e.target.value.trim(),
+                            platform
+                          );
                         }
                       }
 
                       if (errorMessage) {
-                        setErrors((prev) => ({ ...prev, [step - 2]: errorMessage }));
+                        setErrors((prev) => ({
+                          ...prev,
+                          [step - 2]: errorMessage,
+                        }));
                       } else {
                         setErrors((prev) => {
                           const updated = { ...prev };
@@ -700,13 +433,14 @@ const SignupPage = () => {
                     label={steps[step - 2].label}
                     placeholder={steps[step - 2].placeholder}
                     helperText={steps[step - 2].helperText} // Pass helperText
+                    errorText={errors[step - 2]} // Pass errorText if any
                     selectedFile={selectedFile}
                     onFileChange={handleFileChange}
                   />
                 ) : null}
               </div>
 
-              {/* Bottom Row: Icons */}
+              {/* Bottom Row: Icons and Continue Button */}
               <div className="flex justify-between mt-4">
                 {/* Left Icons: Attach and Reset */}
                 <div className="flex space-x-2">
@@ -748,13 +482,15 @@ const SignupPage = () => {
                   </button>
                 </div>
 
-                {/* Continue Button */}
+                {/* Continue Button with ProBanner Style */}
                 <button
                   onClick={handleInputSubmit}
-                  className={`flex items-center bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg py-2 px-4 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-700 transition-colors duration-300 ${
+                  className={`flex group min-w-[120px] items-center font-semibold text-foreground shadow-sm gap-1.5 relative isolate overflow-hidden rounded-full p-[1px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                     (steps[step - 2]?.type === "input" &&
                       (!currentInput.trim() ||
-                        (["Brand name", "Instagram", "TikTok", "Twitter"].includes(steps[step - 2]?.label) &&
+                        (["Brand name", "Instagram", "TikTok", "Twitter"].includes(
+                          steps[step - 2]?.label
+                        ) &&
                           errors[step - 2]))) ||
                     (steps[step - 2]?.type === "upload" && !selectedFile)
                       ? "opacity-50 cursor-not-allowed"
@@ -764,12 +500,26 @@ const SignupPage = () => {
                   disabled={
                     (steps[step - 2]?.type === "input" &&
                       (!currentInput.trim() ||
-                        (["Brand name", "Instagram", "TikTok", "Twitter"].includes(steps[step - 2]?.label) &&
+                        (["Brand name", "Instagram", "TikTok", "Twitter"].includes(
+                          steps[step - 2]?.label
+                        ) &&
                           errors[step - 2]))) ||
                     (steps[step - 2]?.type === "upload" && !selectedFile)
                   }
                 >
-                  Continue
+                  {/* Animated Background with Proper Inset and Spin Duration */}
+                  <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#F54180_0%,#338EF7_50%,#F54180_100%)] pointer-events-none" />
+
+                  {/* Button Content */}
+                  <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-background group-hover:bg-background/70 transition-background px-3 py-1 text-sm font-medium text-foreground backdrop-blur-3xl relative z-10">
+                    Continue
+                    <Icon
+                      aria-hidden="true"
+                      className="outline-none transition-transform group-hover:translate-x-0.5 ml-2 [&>path]:stroke-[2px]"
+                      icon={arrowRightIcon}
+                      width={16}
+                    />
+                  </div>
                 </button>
               </div>
             </div>
@@ -791,9 +541,22 @@ const SignupPage = () => {
           {progress.length === steps.length && (
             <button
               onClick={() => setShowWarp(true)}
-              className="mt-6 w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg py-3 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-700 transition-colors duration-300 dark:from-blue-600 dark:to-purple-700"
+              className={`flex group min-w-[120px] items-center font-semibold text-foreground shadow-sm gap-1.5 relative isolate overflow-hidden rounded-full p-[1px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary mt-6 w-full`}
+              aria-label="Continue"
             >
-              Continue
+              {/* Animated Background with Proper Inset and Spin Duration */}
+              <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#F54180_0%,#338EF7_50%,#F54180_100%)] pointer-events-none" />
+
+              {/* Button Content */}
+              <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-background group-hover:bg-background/70 transition-background px-3 py-1 text-sm font-medium text-foreground backdrop-blur-3xl relative z-10">
+                Continue
+                <Icon
+                  aria-hidden="true"
+                  className="outline-none transition-transform group-hover:translate-x-0.5 [&>path]:stroke-[2px] ml-2"
+                  icon={arrowRightIcon}
+                  width={16}
+                />
+              </div>
             </button>
           )}
         </Card>

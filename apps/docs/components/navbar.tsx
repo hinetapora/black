@@ -141,7 +141,7 @@ export const Navbar: FC = () => {
           </NavbarItem>
 
           <NavbarItem className="flex h-full items-center hidden md:flex">
-            <NextLink href="/account" passHref legacyBehavior>
+            <NextLink href="/dashboard" passHref legacyBehavior>
               <Link className={clsx(navLinkClasses, "flex items-center")} color="foreground">
                 My Dashboard
               </Link>

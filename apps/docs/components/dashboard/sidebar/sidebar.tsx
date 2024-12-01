@@ -1,3 +1,5 @@
+// components/dashboard/sidebar/SidebarWrapper.tsx
+
 import React from "react";
 import { Sidebar } from "./sidebar.styles";
 import { Avatar, Tooltip } from "@nextui-org/react";
@@ -27,7 +29,7 @@ export const SidebarWrapper = () => {
   return (
     <aside className="h-screen z-[20] sticky top-0">
       {collapsed ? (
-        <div className={Sidebar.Overlay()} onClick={setCollapsed} />
+        <div className={Sidebar.Overlay()} onClick={() => setCollapsed(false)} />
       ) : null}
       <div
         className={Sidebar({
@@ -39,72 +41,104 @@ export const SidebarWrapper = () => {
         </div>
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>
+            {/* Home */}
             <SidebarItem
               title="Home"
               icon={<HomeIcon />}
               isActive={pathname === "/"}
               href="/"
             />
+
+            {/* Main Menu */}
             <SidebarMenu title="Main Menu">
+              {/* Accounts */}
               <SidebarItem
-                isActive={pathname === "/accounts"}
+                isActive={pathname === "/dashboard/accounts"}
                 title="Accounts"
                 icon={<AccountsIcon />}
-                href="accounts"
+                href="/dashboard/accounts" // Absolute path
               />
+
+              {/* Payments */}
               <SidebarItem
-                isActive={pathname === "/payments"}
+                isActive={pathname === "/dashboard/payments"}
                 title="Payments"
                 icon={<PaymentsIcon />}
+                href="/dashboard/payments" // Absolute path
               />
+
+              {/* Balances - Dropdown */}
               <CollapseItems
-                icon={<BalanceIcon />}
-                items={["Banks Accounts", "Credit Cards", "Loans"]}
-                title="Balances"
-              />
+  icon={<BalanceIcon />}
+  items={["Banks Accounts", "Credit Cards", "Loans"]}
+  title="Balances"
+/>
+
+              {/* Customers */}
               <SidebarItem
-                isActive={pathname === "/customers"}
+                isActive={pathname === "/dashboard/customers"}
                 title="Customers"
                 icon={<CustomersIcon />}
+                href="/dashboard/customers" // Absolute path
               />
+
+              {/* Products */}
               <SidebarItem
-                isActive={pathname === "/products"}
+                isActive={pathname === "/dashboard/products"}
                 title="Products"
                 icon={<ProductsIcon />}
+                href="/dashboard/products" // Absolute path
               />
+
+              {/* Reports */}
               <SidebarItem
-                isActive={pathname === "/reports"}
+                isActive={pathname === "/dashboard/reports"}
                 title="Reports"
                 icon={<ReportsIcon />}
+                href="/dashboard/reports" // Absolute path
               />
             </SidebarMenu>
 
+            {/* General */}
             <SidebarMenu title="General">
+              {/* Developers */}
               <SidebarItem
-                isActive={pathname === "/developers"}
+                isActive={pathname === "/dashboard/developers"}
                 title="Developers"
                 icon={<DevIcon />}
+                href="/dashboard/developers" // Absolute path
               />
+
+              {/* View Test Data */}
               <SidebarItem
-                isActive={pathname === "/view"}
+                isActive={pathname === "/dashboard/view"}
                 title="View Test Data"
                 icon={<ViewIcon />}
+                href="/dashboard/view" // Absolute path
               />
+
+              {/* Settings */}
               <SidebarItem
-                isActive={pathname === "/settings"}
+                isActive={pathname === "/dashboard/settings"}
                 title="Settings"
                 icon={<SettingsIcon />}
+                href="/dashboard/settings" // Absolute path
               />
             </SidebarMenu>
 
+            {/* Updates */}
             <SidebarMenu title="Updates">
+              {/* Changelog */}
               <SidebarItem
-                isActive={pathname === "/changelog"}
+                isActive={pathname === "/dashboard/changelog"}
                 title="Changelog"
                 icon={<ChangeLogIcon />}
+                href="/dashboard/changelog" // Absolute path
               />
             </SidebarMenu>
           </div>
+
+          {/* Footer */}
           <div className={Sidebar.Footer()}>
             <Tooltip content={"Settings"} color="primary">
               <div className="max-w-fit">
