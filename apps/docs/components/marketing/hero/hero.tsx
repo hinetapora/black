@@ -59,7 +59,7 @@ export const Hero = () => {
           </div>
         </div>
         <h2 className={subtitle({ fullWidth: true, class: "text-center md:text-left" })}>
-        🚀 🚀 Exclusive opportunity: Private label our global VPN to launch your own premium branded service today. <strong>Join for free</strong> with a 50/50 revenue share, up and running 🏃 in 60 minutes ⏰. Limited slots available – apply now.
+        🚀 🚀 Exclusive opportunity: Private label our global VPN to launch your own premium branded service today. <strong style={{ color: 'white' }}>Join for free</strong>, <strong style={{ color: 'white' }}>50/50 rev-share</strong> (stage 1 founders only), up and running 🏃 <strong style={{ color: 'white' }}> in 60 minutes ⏰</strong>. Limited slots available – apply now.
         </h2>
         <div className="flex flex-col items-center gap-4 md:flex-row">
           <Button
@@ -97,7 +97,7 @@ export const Hero = () => {
                 strokeWidth={2}
               />
             }
-            href="/show-me"
+            href="/signup"
             radius="full"
             size="lg"
             onPress={() => {
@@ -105,7 +105,7 @@ export const Hero = () => {
                 name: "Just Show Me",
                 action: "click",
                 category: "landing-page",
-                data: "/show-me",
+                data: "/signup",
               });
             }}
           >

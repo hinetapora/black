@@ -43,7 +43,7 @@ export const Navbar: FC = () => {
   };
 
   const accountLinks = [
-    { href: "/account", label: "Account", icon: <FaUserCircle /> },
+    { href: "/dashboard", label: "Account", icon: <FaUserCircle /> },
     { href: "/membership", label: "Membership", icon: <FaRegCreditCard /> },
     { href: "/security", label: "Security", icon: <FaLock /> },
     { href: "/devices", label: "Devices", icon: <FaMobileAlt /> },
@@ -150,7 +150,7 @@ export const Navbar: FC = () => {
 
           {/* Button: Hidden on small screens, visible on medium and larger */}
           <NavbarItem className="hidden md:flex h-full items-center">
-            <NextLink href="/pricing" passHref legacyBehavior>
+            <NextLink href="/signup" passHref legacyBehavior>
               <Button
                 as={NextLink}
                 className="w-full md:h-11 md:w-auto font-bold flex items-center"
@@ -161,7 +161,7 @@ export const Navbar: FC = () => {
                     strokeWidth={2}
                   />
                 }
-                href="/pricing"
+                href="/signup"
                 radius="full"
                 size="lg"
               >

@@ -88,10 +88,10 @@ const SignupPage = () => {
           While it's easy enough to change it later in the dashboard, as it's your trading name, it's not something you want to change often as this can confuse your customers.
           <br />
           <br />
-          Many social ⭐stars⭐ use their social handle or personal brand like <strong>@handleVPN</strong> or <strong>stream@handle</strong>.
+          Most social stars⭐ use their social handle or social/personal brand like <strong>@khabyVPN</strong> or <strong>stream@charli</strong>.
           <br />
           <br />
-          ⚠️ Limitations: App designs limit the number of Brand Name characters to max 13 characters.
+          ⚠️ Limitations: App designs limit the number of Brand Name characters to max 13.
           <br />
           <br />
           Checkout our reference site at{" "}
