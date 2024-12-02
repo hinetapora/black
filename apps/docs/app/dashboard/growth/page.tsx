@@ -2,8 +2,8 @@
 'use client';
 
 import React from 'react';
-import { Accounts } from '@/components/dashboard/accounts/index';
-import { AddUser } from '@/components/dashboard/accounts/add-user';
+import { Accounts } from '@/components/dashboard/growth/index';
+import { AddUser } from '@/components/dashboard/growth/add-user';
 import { Button } from '@nextui-org/react';
 
 const AccountsPage = () => {
