@@ -231,37 +231,41 @@ export const SidebarWrapper = () => {
           <div className={Sidebar.Footer()}>
             <Tooltip
               content="Settings"
-              placement="bottom-end"
+              placement="top-end"
               delay={2000}
               offset={-7}
               className="bg-transparent text-white text-sm"
             >
-              <div className="max-w-fit">
-                <SettingsIcon />
-              </div>
+              <SidebarItem
+                icon={<SettingsIcon />}
+                isActive={pathname === "/dashboard/settings"}
+                href="/dashboard/settings" title={""}              />
             </Tooltip>
             <Tooltip
               content="Adjustments"
-              placement="bottom-end"
+              placement="top-end"
               delay={2000}
               offset={-7}
               className="bg-transparent text-white text-sm"
             >
-              <div className="max-w-fit">
-                <BalanceIcon />
-              </div>
+              <SidebarItem
+                icon={<BalanceIcon />}
+                isActive={pathname === "/dashboard/adjustments"}
+                href="/dashboard/adjustments" title={""}              />
             </Tooltip>
             <Tooltip
               content="Profile"
-              placement="bottom-end"
+              placement="top-end"
               delay={2000}
               offset={-7}
               className="bg-transparent text-white text-sm"
             >
-              <Avatar
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                size="sm"
-              />
+              <SidebarItem
+                icon={<Avatar
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  size="sm" />}
+                isActive={pathname === "/dashboard/profile"}
+                href="/dashboard/profile" title={""}              />
             </Tooltip>
           </div>
         </div>

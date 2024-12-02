@@ -1,18 +1,18 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "NextUI - Beautiful, fast and modern React UI Library",
-  description: "Make beautiful websites regardless of your design experience.",
+  name: "CicadaVPN Private Label - Your Powerful Brand, our Global Network.",
+  description: "Private label our global VPN to launch your own premium branded service today.",
   ogImage: "https://nextui.org/twitter-cards/nextui.jpeg",
-  author: "Junior Garcia",
-  email: "jrgarciadev@gmail.com",
-  siteUrl: "https://nextui.org",
+  author: "David Awatere",
+  email: "david@cicadavpn.com",
+  siteUrl: "https://cicadavpn.com",
   creator: "@getnextui",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://nextui.org",
-    siteName: "NextUI",
+    siteName: "CicadaVPN Private Label",
     description: "Beautiful, fast and modern React UI Library",
     images: [
       {
