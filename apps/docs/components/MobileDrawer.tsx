@@ -160,9 +160,9 @@ export const MobileDrawer: FC<MobileDrawerProps> = ({
 
             <div className="flex flex-col gap-3 mt-4">
               <NavbarItem>
-                <NextLink href="/dashboard" passHref legacyBehavior>
+                <NextLink href="/account" passHref legacyBehavior>
                   <Link className="text-sm font-medium text-gray-900" onClick={onClose}>
-                    Dashboard
+                    My Account
                   </Link>
                 </NextLink>
               </NavbarItem>

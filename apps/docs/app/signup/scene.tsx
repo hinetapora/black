@@ -71,8 +71,8 @@ export const Scene = ({ onWarpEnd }: { onWarpEnd?: () => void }) => {
       effectsRef.current.offset.set(offsetValue, offsetValue);
     }
 
-    // Trigger onWarpEnd callback after 10 seconds
-    if (state.clock.elapsedTime > 10 && onWarpEnd) {
+    // Trigger onWarpEnd callback after seconds <-------------------------------------------------
+    if (state.clock.elapsedTime > 3 && onWarpEnd) {
       onWarpEnd();
     }
   });

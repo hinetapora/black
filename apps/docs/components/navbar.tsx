@@ -43,7 +43,7 @@ export const Navbar: FC = () => {
   };
 
   const accountLinks = [
-    { href: "/dashboard", label: "Account", icon: <FaUserCircle /> },
+    { href: "/account", label: "Account", icon: <FaUserCircle /> },
     { href: "/membership", label: "Membership", icon: <FaRegCreditCard /> },
     { href: "/security", label: "Security", icon: <FaLock /> },
     { href: "/devices", label: "Devices", icon: <FaMobileAlt /> },
@@ -141,7 +141,7 @@ export const Navbar: FC = () => {
           </NavbarItem>
 
           <NavbarItem className="flex h-full items-center hidden md:flex">
-            <NextLink href="/dashboard" passHref legacyBehavior>
+            <NextLink href="/account" passHref legacyBehavior>
               <Link className={clsx(navLinkClasses, "flex items-center")} color="foreground">
                 My Dashboard
               </Link>

@@ -10,7 +10,7 @@ import manifest from "@/config/routes.json";
 import {siteConfig} from "@/config/site";
 import {fontSans} from "@/config/fonts";
 import {Navbar} from "@/components/navbar";
-import Header from '@/components/dashboard/Header';
+import Header from '@/components/account/Header';
 import {Footer} from "@/components/footer";
 import {ProBanner} from "@/components/pro-banner";
 

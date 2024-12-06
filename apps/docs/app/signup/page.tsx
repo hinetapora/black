@@ -347,7 +347,7 @@ const SignupPage = () => {
 
   // Handle Warp Completion
   const handleWarpComplete = () => {
-    window.location.href = "/dashboard"; // Redirect to the dashboard after warp
+    window.location.href = "/account"; // Redirect to the dashboard after warp
   };
 
   // If warp is active, render FullscreenWarp
