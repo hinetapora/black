@@ -40,7 +40,7 @@
         "formattedDate": "July 31, 2023",
         "imageAsParams": "https://nextui.org/blog/nextuiv2.jpg"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "BlogPost"
     },
@@ -84,7 +84,7 @@
         "formattedDate": "August 21, 2023",
         "imageAsParams": "https://nextui.org/blog/v2.1.0.jpg"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "BlogPost"
     },
@@ -128,7 +128,7 @@
         "formattedDate": "November 3, 2023",
         "imageAsParams": "https://nextui.org/blog/v2.2.0.jpg"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "BlogPost"
     },
@@ -173,7 +173,7 @@
         "formattedDate": "April 16, 2024",
         "imageAsParams": "https://nextui.org/blog/v2.3.0.jpg"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "BlogPost"
     },
@@ -218,7 +218,7 @@
         "formattedDate": "May 27, 2024",
         "imageAsParams": "https://nextui.org/blog/v2.4.0.jpg"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "BlogPost"
     },
@@ -243,7 +243,7 @@
         "slugAsParams": "api-references/cli-api",
         "url": "/docs/api-references/cli-api"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -268,7 +268,7 @@
         "slugAsParams": "api-references/nextui-provider",
         "url": "/docs/api-references/nextui-provider"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -293,7 +293,7 @@
         "slugAsParams": "components/accordion",
         "url": "/docs/components/accordion"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -318,7 +318,7 @@
         "slugAsParams": "components/alert",
         "url": "/docs/components/alert"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -343,7 +343,7 @@
         "slugAsParams": "components/autocomplete",
         "url": "/docs/components/autocomplete"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -368,7 +368,7 @@
         "slugAsParams": "components/avatar",
         "url": "/docs/components/avatar"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -393,7 +393,7 @@
         "slugAsParams": "components/badge",
         "url": "/docs/components/badge"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -418,7 +418,7 @@
         "slugAsParams": "components/breadcrumbs",
         "url": "/docs/components/breadcrumbs"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -443,7 +443,7 @@
         "slugAsParams": "components/button",
         "url": "/docs/components/button"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -468,7 +468,7 @@
         "slugAsParams": "components/calendar",
         "url": "/docs/components/calendar"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -493,7 +493,7 @@
         "slugAsParams": "components/card",
         "url": "/docs/components/card"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -518,7 +518,7 @@
         "slugAsParams": "components/checkbox-group",
         "url": "/docs/components/checkbox-group"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -543,7 +543,7 @@
         "slugAsParams": "components/checkbox",
         "url": "/docs/components/checkbox"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -568,7 +568,7 @@
         "slugAsParams": "components/chip",
         "url": "/docs/components/chip"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -593,7 +593,7 @@
         "slugAsParams": "components/circular-progress",
         "url": "/docs/components/circular-progress"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -618,7 +618,7 @@
         "slugAsParams": "components/code",
         "url": "/docs/components/code"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -643,7 +643,7 @@
         "slugAsParams": "components/date-input",
         "url": "/docs/components/date-input"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -668,7 +668,7 @@
         "slugAsParams": "components/date-picker",
         "url": "/docs/components/date-picker"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -693,7 +693,7 @@
         "slugAsParams": "components/date-range-picker",
         "url": "/docs/components/date-range-picker"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -718,7 +718,7 @@
         "slugAsParams": "components/divider",
         "url": "/docs/components/divider"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -743,7 +743,7 @@
         "slugAsParams": "components/drawer",
         "url": "/docs/components/drawer"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -768,7 +768,7 @@
         "slugAsParams": "components/dropdown",
         "url": "/docs/components/dropdown"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -793,7 +793,7 @@
         "slugAsParams": "components/image",
         "url": "/docs/components/image"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -818,7 +818,7 @@
         "slugAsParams": "components/input",
         "url": "/docs/components/input"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -843,7 +843,7 @@
         "slugAsParams": "components/kbd",
         "url": "/docs/components/kbd"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -868,7 +868,7 @@
         "slugAsParams": "components/link",
         "url": "/docs/components/link"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -893,7 +893,7 @@
         "slugAsParams": "components/listbox",
         "url": "/docs/components/listbox"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -918,7 +918,7 @@
         "slugAsParams": "components/modal",
         "url": "/docs/components/modal"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -943,7 +943,7 @@
         "slugAsParams": "components/navbar",
         "url": "/docs/components/navbar"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -968,7 +968,7 @@
         "slugAsParams": "components/pagination",
         "url": "/docs/components/pagination"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -993,7 +993,7 @@
         "slugAsParams": "components/popover",
         "url": "/docs/components/popover"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1018,7 +1018,7 @@
         "slugAsParams": "components/progress",
         "url": "/docs/components/progress"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1043,7 +1043,7 @@
         "slugAsParams": "components/radio-group",
         "url": "/docs/components/radio-group"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1068,7 +1068,7 @@
         "slugAsParams": "components/range-calendar",
         "url": "/docs/components/range-calendar"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1093,7 +1093,7 @@
         "slugAsParams": "components/scroll-shadow",
         "url": "/docs/components/scroll-shadow"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1118,7 +1118,7 @@
         "slugAsParams": "components/select",
         "url": "/docs/components/select"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1143,7 +1143,7 @@
         "slugAsParams": "components/skeleton",
         "url": "/docs/components/skeleton"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1168,7 +1168,7 @@
         "slugAsParams": "components/slider",
         "url": "/docs/components/slider"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1193,7 +1193,7 @@
         "slugAsParams": "components/snippet",
         "url": "/docs/components/snippet"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1218,7 +1218,7 @@
         "slugAsParams": "components/spacer",
         "url": "/docs/components/spacer"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1243,7 +1243,7 @@
         "slugAsParams": "components/spinner",
         "url": "/docs/components/spinner"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1268,7 +1268,7 @@
         "slugAsParams": "components/switch",
         "url": "/docs/components/switch"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1293,7 +1293,7 @@
         "slugAsParams": "components/table",
         "url": "/docs/components/table"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1318,7 +1318,7 @@
         "slugAsParams": "components/tabs",
         "url": "/docs/components/tabs"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1343,7 +1343,7 @@
         "slugAsParams": "components/textarea",
         "url": "/docs/components/textarea"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1368,7 +1368,7 @@
         "slugAsParams": "components/time-input",
         "url": "/docs/components/time-input"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1393,7 +1393,7 @@
         "slugAsParams": "components/tooltip",
         "url": "/docs/components/tooltip"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1418,7 +1418,7 @@
         "slugAsParams": "components/user",
         "url": "/docs/components/user"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1443,7 +1443,7 @@
         "slugAsParams": "customization/colors",
         "url": "/docs/customization/colors"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1468,7 +1468,7 @@
         "slugAsParams": "customization/create-theme",
         "url": "/docs/customization/create-theme"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1493,7 +1493,7 @@
         "slugAsParams": "customization/custom-variants",
         "url": "/docs/customization/custom-variants"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1518,7 +1518,7 @@
         "slugAsParams": "customization/customize-theme",
         "url": "/docs/customization/customize-theme"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1543,7 +1543,7 @@
         "slugAsParams": "customization/dark-mode",
         "url": "/docs/customization/dark-mode"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1568,7 +1568,7 @@
         "slugAsParams": "customization/layout",
         "url": "/docs/customization/layout"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1593,7 +1593,7 @@
         "slugAsParams": "customization/override-styles",
         "url": "/docs/customization/override-styles"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1618,7 +1618,7 @@
         "slugAsParams": "customization/theme",
         "url": "/docs/customization/theme"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1643,7 +1643,7 @@
         "slugAsParams": "frameworks/astro",
         "url": "/docs/frameworks/astro"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1668,7 +1668,7 @@
         "slugAsParams": "frameworks/nextjs",
         "url": "/docs/frameworks/nextjs"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1693,7 +1693,7 @@
         "slugAsParams": "frameworks/remix",
         "url": "/docs/frameworks/remix"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1718,7 +1718,7 @@
         "slugAsParams": "frameworks/vite",
         "url": "/docs/frameworks/vite"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1743,7 +1743,7 @@
         "slugAsParams": "guide/cli",
         "url": "/docs/guide/cli"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1768,7 +1768,7 @@
         "slugAsParams": "guide/design-principles",
         "url": "/docs/guide/design-principles"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1793,7 +1793,7 @@
         "slugAsParams": "guide/installation",
         "url": "/docs/guide/installation"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1733731259247",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1818,7 +1818,7 @@
         "slugAsParams": "guide/introduction",
         "url": "/docs/guide/introduction"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1843,7 +1843,7 @@
         "slugAsParams": "guide/routing",
         "url": "/docs/guide/routing"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1733731259247",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     },
@@ -1868,7 +1868,7 @@
         "slugAsParams": "guide/upgrade-to-v2",
         "url": "/docs/guide/upgrade-to-v2"
       },
-      "documentHash": "1732279552000",
+      "documentHash": "1731348022000",
       "hasWarnings": false,
       "documentTypeName": "Doc"
     }
