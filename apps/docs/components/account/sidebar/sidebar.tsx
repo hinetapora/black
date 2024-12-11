@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar } from "./sidebar.styles";
 import { Avatar, Tooltip } from "@nextui-org/react";
 import { CompaniesDropdown } from "./companies-dropdown";
@@ -17,10 +17,45 @@ import { SidebarMenu } from "./sidebar-menu";
 import { ChangeLogIcon } from "../icons/sidebar/changelog-icon";
 import { useSidebarContext } from "../layout/layout-context";
 import { usePathname } from "next/navigation";
+import { supabase } from "@/utils/supabaseClient";
 
 export const SidebarWrapper = () => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
+
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data?.session) {
+        const token = data.session.access_token;
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split("")
+            .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+            .join("")
+        );
+        const parsedJwt = JSON.parse(jsonPayload);
+
+        const { data: user, error } = await supabase
+          .from("users")
+          .select("avatar_url")
+          .eq("id", parsedJwt.sub)
+          .single();
+
+        if (error) {
+          console.error("Error fetching user profile:", error.message);
+        } else {
+          setAvatarUrl(user?.avatar_url || null);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   return (
     <aside className="h-screen z-[20] sticky top-0">
@@ -57,7 +92,6 @@ export const SidebarWrapper = () => {
 
             {/* Main Menu */}
             <SidebarMenu title="Main Menu">
-              {/* Growth */}
               <Tooltip
                 content="Marketing tools to acquire customers"
                 placement="bottom-end"
@@ -75,7 +109,6 @@ export const SidebarWrapper = () => {
                 </div>
               </Tooltip>
 
-              {/* Acquisition */}
               <Tooltip
                 content="Manage subscriptions and customers"
                 placement="bottom-end"
@@ -93,7 +126,6 @@ export const SidebarWrapper = () => {
                 </div>
               </Tooltip>
 
-              {/* Rank */}
               <Tooltip
                 content="Track rank progress and rewards"
                 placement="bottom-end"
@@ -111,7 +143,6 @@ export const SidebarWrapper = () => {
                 </div>
               </Tooltip>
 
-              {/* Earnings */}
               <Tooltip
                 content="View revenue and payouts"
                 placement="bottom-end"
@@ -129,7 +160,6 @@ export const SidebarWrapper = () => {
                 </div>
               </Tooltip>
 
-              {/* Resources */}
               <Tooltip
                 content="Access help center and community"
                 placement="bottom-end"
@@ -150,7 +180,6 @@ export const SidebarWrapper = () => {
 
             {/* General */}
             <SidebarMenu title="General">
-              {/* Developers */}
               <Tooltip
                 content="Developer tools and documentation"
                 placement="bottom-end"
@@ -168,7 +197,6 @@ export const SidebarWrapper = () => {
                 </div>
               </Tooltip>
 
-              {/* Branding */}
               <Tooltip
                 content="Customize website and app branding"
                 placement="bottom-end"
@@ -186,7 +214,6 @@ export const SidebarWrapper = () => {
                 </div>
               </Tooltip>
 
-              {/* Settings */}
               <Tooltip
                 content="Manage account and preferences"
                 placement="bottom-end"
@@ -207,7 +234,6 @@ export const SidebarWrapper = () => {
 
             {/* Updates */}
             <SidebarMenu title="Updates">
-              {/* Changelog */}
               <Tooltip
                 content="Latest changes and updates"
                 placement="bottom-end"
@@ -239,7 +265,9 @@ export const SidebarWrapper = () => {
               <SidebarItem
                 icon={<SettingsIcon />}
                 isActive={pathname === "/account/settings"}
-                href="/account/settings" title={""}              />
+                href="/account/settings"
+                title={""}
+              />
             </Tooltip>
             <Tooltip
               content="Adjustments"
@@ -251,7 +279,9 @@ export const SidebarWrapper = () => {
               <SidebarItem
                 icon={<BalanceIcon />}
                 isActive={pathname === "/account/adjustments"}
-                href="/account/adjustments" title={""}              />
+                href="/account/adjustments"
+                title={""}
+              />
             </Tooltip>
             <Tooltip
               content="Profile"
@@ -261,11 +291,16 @@ export const SidebarWrapper = () => {
               className="bg-transparent text-white text-sm"
             >
               <SidebarItem
-                icon={<Avatar
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  size="sm" />}
+                icon={
+                  <Avatar
+                    src={avatarUrl || "https://i.pravatar.cc/150?u=a042581f4e29026704d"}
+                    size="sm"
+                  />
+                }
                 isActive={pathname === "/account/profile"}
-                href="/account/profile" title={""}              />
+                href="/account/profile"
+                title={""}
+              />
             </Tooltip>
           </div>
         </div>
