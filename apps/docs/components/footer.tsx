@@ -20,6 +20,7 @@ export const Footer = () => {
   const [jwtExpiration, setJwtExpiration] = useState<number | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
   const [userData, setUserData] = useState<any>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); // New state for avatar URL
   const [accountsData, setAccountsData] = useState<any[]>([]);
   const [devicesData, setDevicesData] = useState<any[]>([]);
   const [authCreatedAt, setAuthCreatedAt] = useState<string | null>(null);
@@ -67,38 +68,39 @@ export const Footer = () => {
           setAuthCreatedAt(user.user?.created_at);
         }
 
-        // Fetch user data from Supabase
-        const { data: userData, error: userError } = await supabase
+        // Fetch user data from Supabase, including avatar_url
+        const { data: fetchedUserData, error: userError } = await supabase
           .from("users")
-          .select("id")
+          .select("id, avatar_url") // Include avatar_url in the selection
           .eq("id", parsedJwt.sub)
           .single();
 
         if (userError) {
           console.error("Error fetching user data:", userError.message);
         } else {
-          setUserData(userData);
+          setUserData(fetchedUserData);
+          setAvatarUrl(fetchedUserData.avatar_url || null); // Set avatar URL
         }
 
         // Fetch all account data associated with the user
-        const { data: accountsData, error: accountsError } = await supabase
+        const { data: fetchedAccountsData, error: accountsError } = await supabase
           .from("accounts")
           .select("id, account_number, max_devices, expiry, created_at")
-          .eq("user_id", userData?.id);
+          .eq("user_id", fetchedUserData?.id);
 
         if (accountsError) {
           console.error("Error fetching account data:", accountsError.message);
         } else {
-          setAccountsData(accountsData || []); // Set the accounts data
+          setAccountsData(fetchedAccountsData || []); // Set the accounts data
 
           // Extract the account numbers
-          const accountNumbers = accountsData?.map(
+          const accountNumbers = fetchedAccountsData?.map(
             (account) => account.account_number
           );
 
           // Fetch devices associated with the user's accounts
           if (accountNumbers.length > 0) {
-            const { data: devicesData, error: devicesError } = await supabase
+            const { data: fetchedDevicesData, error: devicesError } = await supabase
               .from("devices")
               .select(
                 "name, ipv4_address, ipv6_address, last_active, event_type, account_number"
@@ -108,7 +110,7 @@ export const Footer = () => {
             if (devicesError) {
               console.error("Error fetching devices:", devicesError.message);
             } else {
-              setDevicesData(devicesData || []); // Set the devices data
+              setDevicesData(fetchedDevicesData || []); // Set the devices data
             }
           }
         }
@@ -408,27 +410,36 @@ export const Footer = () => {
         </div>
 
         {/* Trademark Acknowledgments */}
-          <div className="text-sm text-gray-600 dark:text-gray-400 mt-4 text-center">
-            WireGuard® is a registered trademark of Jason A. Donenfeld.<br />
-            Apple®, iOS®, and macOS® are trademarks of Apple Inc., registered in the U.S. and other countries.<br />
-            Android™ and Google Play™ are trademarks of Google LLC.<br />
-            Windows® is a registered trademark of Microsoft Corporation.<br />
-            Linux® is a registered trademark of Linus Torvalds.<br />
-            Firefox® is a registered trademark of the Mozilla Foundation.<br />
-            Visa® is a registered trademark of Visa International Service Association.<br />
-            Mastercard® is a registered trademark of Mastercard International.<br />
-            PayPal® is a registered trademark of PayPal, Inc.
-          </div>
+        <div className="text-sm text-gray-600 dark:text-gray-400 mt-4 text-center">
+          WireGuard® is a registered trademark of Jason A. Donenfeld.<br />
+          Apple®, iOS®, and macOS® are trademarks of Apple Inc., registered in the U.S. and other countries.<br />
+          Android™ and Google Play™ are trademarks of Google LLC.<br />
+          Windows® is a registered trademark of Microsoft Corporation.<br />
+          Linux® is a registered trademark of Linus Torvalds.<br />
+          Firefox® is a registered trademark of the Mozilla Foundation.<br />
+          Visa® is a registered trademark of Visa International Service Association.<br />
+          Mastercard® is a registered trademark of Mastercard International.<br />
+          PayPal® is a registered trademark of PayPal, Inc.
+        </div>
 
-        {/* JWT Snippet, Full Name, Email, User Data, Account Data, and Device Data */}
+        {/* JWT Snippet, Full Name, Email, User Data, Account Data, Device Data, and Avatar */}
         <div className="text-sm text-gray-600 dark:text-gray-400 mt-8 text-center">
           {jwtSnippet ? (
             <>
-            <h3 className="font-bold mt-4">JWT information</h3>
+              <h3 className="font-bold mt-4">JWT Information</h3>
               <p>JWT Snippet: {jwtSnippet}</p>
               {fullName && <p>Full Name: {fullName}</p>}
               {email && <p>Email: {email}</p>}
-              {authCreatedAt && <p>User Created At: {authCreatedAt}</p>}
+              {avatarUrl && (
+                <div className="mt-2">
+                  <img
+                    src={avatarUrl}
+                    alt="User Avatar"
+                    className="w-16 h-16 rounded-full mx-auto"
+                  />
+                </div>
+              )}
+              {authCreatedAt && <p>User Created At: {new Date(authCreatedAt).toLocaleString()}</p>}
               {jwtExpiration && (
                 <>
                   <p>JWT Expires At: {new Date(jwtExpiration * 1000).toLocaleString()}</p>
@@ -444,12 +455,12 @@ export const Footer = () => {
                 <>
                   <h3 className="font-bold mt-4">Accounts</h3>
                   {accountsData.map((account) => (
-                    <div key={account.id}>
+                    <div key={account.id} className="mt-2">
                       <p>Account ID: {account.id}</p>
                       <p>Account Number: {account.account_number}</p>
                       <p>Max Devices: {account.max_devices}</p>
-                      <p>Expiry: {account.expiry}</p>
-                      <p>Created At: {account.created_at}</p>
+                      <p>Expiry: {new Date(account.expiry).toLocaleDateString()}</p>
+                      <p>Created At: {new Date(account.created_at).toLocaleString()}</p>
                     </div>
                   ))}
                 </>
@@ -460,11 +471,13 @@ export const Footer = () => {
                 <>
                   <h3 className="font-bold mt-4">Devices</h3>
                   {devicesData.map((device) => (
-                    <div key={device.name}>
+                    <div key={device.name} className="mt-2">
                       <p>Device Name: {device.name}</p>
                       <p>IPv4 Address: {device.ipv4_address}</p>
                       <p>IPv6 Address: {device.ipv6_address}</p>
-                      <p>Last Active: {device.last_active}</p>
+                      <p>Last Active: {new Date(device.last_active).toLocaleString()}</p>
+                      <p>Event Type: {device.event_type}</p>
+                      <p>Account Number: {device.account_number}</p>
                     </div>
                   ))}
                 </>

@@ -1,122 +1,123 @@
 #!/bin/bash
 
-# Load environment variables from .env file
-echo "Loading environment variables from .env file..."
-if [ -f "../.env" ]; then
+# ============================================
+# Script to Dump Supabase Public Schema for Private Labeling
+# ============================================
+
+# Function to display error messages and exit
+function error_exit {
+  echo "Error: $1" >&2
+  exit 1
+}
+
+# ============================================
+# Step 1: Load Environment Variables
+# ============================================
+
+echo "Loading environment variables from .env.local file..."
+
+ENV_FILE="../.env.local"
+
+if [ -f "$ENV_FILE" ]; then
+  # Export all variables from the .env.local file
   set -o allexport
-  source ../.env
+  source "$ENV_FILE"
   set +o allexport
-  echo ".env file found and loaded successfully."
+  echo ".env.local file found and loaded successfully."
 else
-  echo "Error: .env file not found! Please make sure the .env file exists in the current directory."
-  exit 1
+  error_exit ".env.local file not found! Please ensure it exists in the parent directory."
 fi
 
-# Confirm required environment variables are loaded
-echo "Checking for Supabase credentials in environment variables..."
-if [ -z "$SUPABASE_DB_USER" ]; then
-  echo "Error: Required Supabase environment variables are not set correctly in the .env file."
-  exit 1
-else
-  echo "Supabase database user found and loaded correctly."
-fi
+# ============================================
+# Step 2: Verify Required Environment Variables
+# ============================================
 
-# Use the working Supabase host and port
-PG_DUMP_HOST="aws-0-us-east-1.pooler.supabase.com"
-PG_DUMP_PORT="6543"
+echo "Checking for required Supabase environment variables..."
 
-# Get database user from the .env file
-DB_USER=$SUPABASE_DB_USER
+# List of required variables (adjust as necessary)
+REQUIRED_VARS=("SUPABASE_DB_USER")
 
-# Prompt for password interactively
-echo "Please enter the password for user $DB_USER:"
+for var in "${REQUIRED_VARS[@]}"; do
+  if [ -z "${!var}" ]; then
+    error_exit "Environment variable $var is not set. Please define it in the .env.local file."
+  else
+    echo "✔ $var is set."
+  fi
+done
+
+# ============================================
+# Step 3: Set Supabase Connection Parameters
+# ============================================
+
+# Use existing environment variables or set defaults if needed
+SUPABASE_DB_HOST="${SUPABASE_DB_HOST:-aws-0-us-east-1.pooler.supabase.com}"
+SUPABASE_DB_PORT="${SUPABASE_DB_PORT:-6543}"
+SUPABASE_DB_NAME="${SUPABASE_DB_NAME:-postgres}"
+
+DB_USER="$SUPABASE_DB_USER"
+
+echo "Supabase Connection Details:"
+echo "Host: $SUPABASE_DB_HOST"
+echo "Port: $SUPABASE_DB_PORT"
+echo "Database Name: $SUPABASE_DB_NAME"
+echo "User: $DB_USER"
+
+# ============================================
+# Step 4: Prompt for Database Password
+# ============================================
+
+echo "Please enter the password for user '$DB_USER':"
 read -s DB_PASSWORD
+echo "Password entered."
 
-# Construct the Postgres connection string (password will be prompted)
-PG_DUMP_CONNECTION_URL="postgres://$DB_USER@$PG_DUMP_HOST:$PG_DUMP_PORT/postgres"
+# ============================================
+# Step 5: Construct PostgreSQL Connection URL
+# ============================================
+
+PG_DUMP_CONNECTION_URL="postgres://$DB_USER@$SUPABASE_DB_HOST:$SUPABASE_DB_PORT/$SUPABASE_DB_NAME"
 
 # Get the current date and time for the filename
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M")
+DUMP_FILE="dump_supabase_public_${TIMESTAMP}.sql"
 
-# Set the filename for the dump file
-DUMP_FILE="dump_supabase_${TIMESTAMP}.sql"
+echo "Connecting to Supabase at host: $SUPABASE_DB_HOST on port $SUPABASE_DB_PORT"
+echo "Starting the public schema dump and saving it as $DUMP_FILE..."
 
-echo "Connecting to Supabase at host: $PG_DUMP_HOST on port $PG_DUMP_PORT"
-echo "Starting the database schema dump and saving it as $DUMP_FILE..."
+# ============================================
+# Step 6: Perform Schema-Only Dump for Public Schema
+# ============================================
 
-# Perform a schema-only database dump (no data)
-pg_dump "$PG_DUMP_CONNECTION_URL" --username=$DB_USER --schema-only --file=$DUMP_FILE
+# Export PGPASSWORD to use with pg_dump
+export PGPASSWORD="$DB_PASSWORD"
 
+# Perform a schema-only database dump for the public schema
+pg_dump "$PG_DUMP_CONNECTION_URL" \
+  --username="$DB_USER" \
+  --schema=public \
+  --schema-only \
+  --file="$DUMP_FILE" \
+  --no-owner \
+  --no-privileges
+
+# Check if pg_dump was successful
 if [ $? -eq 0 ]; then
-  echo "Database schema dump complete. Dump saved to $DUMP_FILE."
+  echo "✔ Public schema dump completed successfully."
+  echo "Schema saved to $DUMP_FILE."
 else
-  echo "Error: Database dump failed! Please check the Supabase connection and credentials."
-  exit 1
+  error_exit "Schema dump failed! Please check the Supabase connection and credentials."
 fi
 
-# Now continue with the file concatenation process
-echo "======================================="
-echo "Beginning the concatenation of files..."
-echo "======================================="
+# Unset PGPASSWORD for security
+unset PGPASSWORD
 
-# Output file for concatenation
-output_file="dump_gpt_concat_output.txt"
+# ============================================
+# (Optional) Further Processing Steps
+# ============================================
 
-echo "Initializing concatenation of files..."
-echo "Output file: $output_file"
-
-# Clear the output file if it exists
-if [ -f "$output_file" ]; then
-  echo "Clearing existing output file: $output_file"
-  > $output_file
-else
-  echo "No existing output file found. Creating a new one..."
-fi
-
-# Add the output of the tree command to the file
-echo "Adding the directory structure to $output_file"
-echo -e "\n### Directory Structure\n" >> $output_file
-tree -L 2 >> $output_file
-
-# Process and concatenate the files in the app/ directory except for docs, examples, perf, select table
-echo "Processing files under app/ directory..."
-for dir in $(find app -mindepth 1 -maxdepth 1 -type d | grep -vE "app/docs|app/examples|app/perf|app/select_table"); do
-  for file in $(find $dir -type f); do
-    echo "Adding file: $file"
-    echo -e "\n### File: $file\n" >> $output_file
-    cat "$file" >> $output_file
-    echo -e "\n// End of file: $file\n" >> $output_file
-  done
-done
-
-# Process and concatenate the files in components/ directory except for ads, code-window, demos, docs, featurebase, icons, sandpack
-echo "Processing files under components/ directory..."
-for dir in $(find components -mindepth 1 -maxdepth 1 -type d | grep -vE "components/ads|components/code-window|components/demos|components/docs|components/featurebase|components/icons|components/sandpack"); do
-  for file in $(find $dir -type f); do
-    echo "Adding file: $file"
-    echo -e "\n### File: $file\n" >> $output_file
-    cat "$file" >> $output_file
-    echo -e "\n// End of file: $file\n" >> $output_file
-  done
-done
-
-# Concatenate everything in config/, types/, and utils/ directories
-for dir in config types utils; do
-  echo "Processing files under $dir/ directory..."
-  for file in $(find $dir -type f); do
-    echo "Adding file: $file"
-    echo -e "\n### File: $file\n" >> $output_file
-    cat "$file" >> $output_file
-    echo -e "\n// End of file: $file\n" >> $output_file
-  done
-done
-
-echo "Concatenation of files complete. Final output saved to $output_file."
-
-# Count the number of lines in the concatenated file
-concat_lines=$(wc -l < "$output_file")
-echo "The concatenated output file $output_file contains $concat_lines lines."
+# If you need to perform additional actions after the dump,
+# such as uploading to a storage service or integrating with your deployment pipeline,
+# you can add those steps here.
 
 echo "======================================="
-echo "        SCRIPT EXECUTION COMPLETE"
+echo "        SCHEMA DUMP SCRIPT COMPLETE"
 echo "======================================="
