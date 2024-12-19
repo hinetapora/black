@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import { Content } from '@/components/account/home/content';
+import { Content } from '@/components/account/settings/content';
 
 const DashboardPage: React.FC = () => {
   return <Content />;

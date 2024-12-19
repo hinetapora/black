@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Dropdown,
   DropdownItem,
@@ -6,121 +7,166 @@ import {
   DropdownSection,
   DropdownTrigger,
 } from "@nextui-org/react";
-import React, { useState } from "react";
-import { AcmeIcon } from "../icons/acme-icon";
-import { AcmeLogo } from "../icons/acmelogo";
+import React, { useState, useEffect } from "react";
 import { BottomIcon } from "../icons/sidebar/bottom-icon";
+import { supabase } from "@/utils/supabaseClient"; // Ensure this path is correct
 
-interface Company {
-  name: string;
-  location: string;
-  logo: React.ReactNode;
+// Define the Agency interface based on your schema
+interface Agency {
+  id: string;
+  logo_svg: string; // Assuming logo is stored as an SVG string
 }
 
 export const CompaniesDropdown = () => {
-  const [company, setCompany] = useState<Company>({
-    name: "Acme Co.",
-    location: "Palo Alto, CA",
-    logo: <AcmeIcon />,
-  });
+  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Function to decode JWT and extract UUID (similar to your footer)
+  const getUserUUIDFromJWT = (token: string): string | null => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+
+      const parsedJwt = JSON.parse(jsonPayload);
+      return parsedJwt.sub || null; // 'sub' contains the UUID
+    } catch (error) {
+      console.error("Error decoding JWT:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchAgencies = async () => {
+      setLoading(true);
+      try {
+        // Step 1: Get the current session
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+        if (session && session.access_token) {
+          const userUUID = getUserUUIDFromJWT(session.access_token);
+          if (!userUUID) {
+            console.error("User UUID not found in JWT.");
+            setLoading(false);
+            return;
+          }
+
+          // Step 2: Fetch agency_team_members to get agency_ids
+          const { data: teamMembers, error: teamError } = await supabase
+            .from("agency_team_members")
+            .select("agency_id")
+            .eq("user_id", userUUID);
+
+          if (teamError) {
+            console.error("Error fetching team members:", teamError.message);
+            setLoading(false);
+            return;
+          }
+
+          const agencyIds = teamMembers.map((member) => member.agency_id);
+
+          if (agencyIds.length === 0) {
+            console.warn("No agencies associated with this user.");
+            setLoading(false);
+            return;
+          }
+
+          // Step 3: Fetch agencies based on the agencyIds
+          const { data: agenciesData, error: agenciesError } = await supabase
+            .from("agencies")
+            .select("id, logo_square")
+            .in("id", agencyIds);
+
+          if (agenciesError) {
+            console.error("Error fetching agencies:", agenciesError.message);
+            setLoading(false);
+            return;
+          }
+
+          // Step 4: Map the fetched data to the Agency interface
+          const fetchedAgencies: Agency[] = agenciesData.map((agency: any) => ({
+            id: agency.id,
+            logo_svg: agency.logo_square, // SVG string
+          }));
+
+          setAgencies(fetchedAgencies);
+
+          // Set the first agency as the default selected agency
+          if (fetchedAgencies.length > 0) {
+            setSelectedAgency(fetchedAgencies[0]);
+          }
+        } else {
+          console.error("No active session found.");
+        }
+      } catch (error) {
+        console.error("Unexpected error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAgencies();
+  }, []);
+
+  // Handler for when an agency is selected from the dropdown
+  const handleAction = (key: string | number) => {
+    const agency = agencies.find((agency) => agency.id === key);
+    if (agency) {
+      setSelectedAgency(agency);
+      // Optionally, implement additional logic such as updating user context or application state
+    }
+  };
+
   return (
     <Dropdown
       classNames={{
         base: "w-full min-w-[260px]",
       }}
+      isDisabled={loading || agencies.length === 0}
     >
       <DropdownTrigger className="cursor-pointer">
         <div className="flex items-center gap-2">
-          {company.logo}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-medium m-0 text-default-900 -mb-4 whitespace-nowrap">
-              {company.name}
-            </h3>
-            <span className="text-xs font-medium text-default-500">
-              {company.location}
-            </span>
-          </div>
+          {selectedAgency?.logo_svg ? (
+            <div
+              className="w-6 h-6"
+              dangerouslySetInnerHTML={{ __html: selectedAgency.logo_svg }}
+            />
+          ) : (
+            <div className="w-6 h-6 bg-gray-300 rounded-full" /> // Placeholder if no logo
+          )}
           <BottomIcon />
         </div>
       </DropdownTrigger>
-      <DropdownMenu
-        onAction={(e) => {
-          if (e === "1") {
-            setCompany({
-              name: "Facebook",
-              location: "San Fransico, CA",
-              logo: <AcmeIcon />,
-            });
-          }
-          if (e === "2") {
-            setCompany({
-              name: "Instagram",
-              location: "Austin, Tx",
-              logo: <AcmeLogo />,
-            });
-          }
-          if (e === "3") {
-            setCompany({
-              name: "Twitter",
-              location: "Brooklyn, NY",
-              logo: <AcmeIcon />,
-            });
-          }
-          if (e === "4") {
-            setCompany({
-              name: "Acme Co.",
-              location: "Palo Alto, CA",
-              logo: <AcmeIcon />,
-            });
-          }
-        }}
-        aria-label="Avatar Actions"
-      >
-        <DropdownSection title="Companies">
-          <DropdownItem
-            key="1"
-            startContent={<AcmeIcon />}
-            description="San Fransico, CA"
-            classNames={{
-              base: "py-4",
-              title: "text-base font-semibold",
-            }}
-          >
-            Facebook
-          </DropdownItem>
-          <DropdownItem
-            key="2"
-            startContent={<AcmeLogo />}
-            description="Austin, Tx"
-            classNames={{
-              base: "py-4",
-              title: "text-base font-semibold",
-            }}
-          >
-            Instagram
-          </DropdownItem>
-          <DropdownItem
-            key="3"
-            startContent={<AcmeIcon />}
-            description="Brooklyn, NY"
-            classNames={{
-              base: "py-4",
-              title: "text-base font-semibold",
-            }}
-          >
-            Twitter
-          </DropdownItem>
-          <DropdownItem
-            key="4"
-            startContent={<AcmeIcon />}
-            description="Palo Alto, CA"
-            classNames={{
-              base: "py-4",
-              title: "text-base font-semibold",
-            }}
-          >
-            Acme Co.
-          </DropdownItem>
+      <DropdownMenu onAction={handleAction} aria-label="Agency Actions">
+        <DropdownSection title="Agencies">
+          {agencies.map((agency) => (
+            <DropdownItem
+              key={agency.id}
+              startContent={
+                <div
+                  className="w-6 h-6"
+                  dangerouslySetInnerHTML={{ __html: agency.logo_svg }}
+                />
+              }
+              classNames={{
+                base: "py-4",
+              }}
+              value={agency.id} // Set the value to identify which agency was selected
+            >
+              {/* Since we're removing name and location, the child can be empty or contain a visual indicator */}
+              {/* Optionally, you can add tooltips or accessible labels */}
+            </DropdownItem>
+          ))}
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>
